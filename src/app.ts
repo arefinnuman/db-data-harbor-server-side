@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import globalErrorHandler from './app/middleWares/globalError';
 import { notFoundHandler } from './app/middleWares/notFound';
+import routes from './app/routes/routes';
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to DB Data Harbor');
 });
 
-// app.use('/api/v1/', router);
+app.use('/api/v1/', routes);
 
 app.use(globalErrorHandler);
 
