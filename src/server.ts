@@ -1,12 +1,12 @@
-import { Server } from "http";
-import mongoose from "mongoose";
-import app from "./app";
-import config from "./config/config";
+import { Server } from 'http';
+import mongoose from 'mongoose';
+import app from './app';
+import config from './config/config';
 
 const databaseUrl = config.database_url as string;
 const usingPort = config.port;
 
-process.on("uncaughtException", (error) => {
+process.on('uncaughtException', error => {
   console.error(error);
   process.exit(1);
 });
@@ -19,13 +19,13 @@ async function bootstrap() {
     console.log(`Database Connected`);
 
     server = app.listen(usingPort, () => {
-      console.log(`Digital Cow Hut  running on port ${usingPort}`);
+      console.log(`DB Data Harbor running on port ${usingPort}`);
     });
   } catch (error) {
     console.error(`Failed to connect`, error);
   }
 
-  process.on("unhandledRejection", (error) => {
+  process.on('unhandledRejection', error => {
     if (server) {
       server.close(() => {
         console.error(error);
@@ -44,4 +44,3 @@ process.on(`SIGTERM`, () => {
     server.close();
   }
 });
-
