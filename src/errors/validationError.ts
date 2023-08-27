@@ -1,7 +1,7 @@
 // validation error
 import mongoose from 'mongoose';
-import { IGenericErrorMessage } from '../interface/errorMessage';
-import { IGenericErrorResponse } from '../interface/errorResponse';
+import { IGenericErrorMessage } from '../interfaces/errorMessage';
+import { IGenericErrorResponse } from '../interfaces/errorResponse';
 
 const ValidationError = (
   error: mongoose.Error.ValidationError,

@@ -11,7 +11,7 @@ import CastError from '../../errors/castError';
 import DuplicateKeyError from '../../errors/duplicateKeyError';
 import ValidationError from '../../errors/validationError';
 import handleZodError from '../../errors/zodError';
-import { IGenericErrorMessage } from '../../interface/errorMessage';
+import { IGenericErrorMessage } from '../../interfaces/errorMessage';
 
 const globalErrorHandler: ErrorRequestHandler = (
   error,

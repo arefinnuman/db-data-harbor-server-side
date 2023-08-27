@@ -1,11 +1,11 @@
 import express from 'express';
-import { AtmBoothsRoutes } from '../modules/atmBooths/atmBooths.routes';
+import { TerminalRoutes } from '../modules/terminal/terminal.routes';
 
 const routes = express.Router();
 const moduleRoutes = [
   {
-    path: '/atm-booths',
-    route: AtmBoothsRoutes,
+    path: '/terminals',
+    route: TerminalRoutes,
   },
 ];
 

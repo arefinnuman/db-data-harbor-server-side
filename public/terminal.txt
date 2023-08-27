@@ -8,8 +8,8 @@
 8. glCode
 9. insuranceLimit
 10. assetTagSerial
-11. liveDate
-12. deploymentDate
+11. deploymentDate
+12. liveDate
 13. monthlyNoOfTransaction
 14. monthlyVolOfTransaction
 15. monthlyAvgNoOfTxn
@@ -22,3 +22,4 @@
     name, contactNumber
 }
 19. numberOfBpm
+20. createdUser
