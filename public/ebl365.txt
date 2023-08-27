@@ -1,0 +1,21 @@
+1. ebl365Name
+2. ebl365Address
+3. ebl365Zone
+4. ebl365NameInBengali
+5. ebl365StatusType
+6. locationType
+7. areaType
+8. areaName
+9. geoLatitude 
+10. geoLongitude
+11. branchControllingGl
+12. division
+13. postalCOde
+14. nearestFamousPlace
+15. noOfAvailableMachine
+16. noOfRunningMachine
+17. divisionId 
+18. districtId
+19. upazilaOrThana
+20. controlledBy
+21. machines: []

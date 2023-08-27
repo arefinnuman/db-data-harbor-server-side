@@ -1,0 +1,24 @@
+1. terminalType
+2. terminalId
+3. terminalNameAndId
+4. terminalStatus
+5. terminalBrand
+6. terminalModel
+7. glNumber
+8. glCode
+9. insuranceLimit
+10. assetTagSerial
+11. liveDate
+12. deploymentDate
+13. monthlyNoOfTransaction
+14. monthlyVolOfTransaction
+15. monthlyAvgNoOfTxn
+16. monthlyAvgVolOfTxn
+17. custodiansKey : {
+        name,
+        contactNumber
+}
+18. custodiansCom: {
+    name, contactNumber
+}
+19. numberOfBpm
