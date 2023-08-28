@@ -5,7 +5,7 @@ import {
   TerminalType,
 } from './terminal.constant';
 
-export type ITerminal = {
+export type ITerminal = Document & {
   terminalType: TerminalType;
   terminalId: string;
   terminalNameAndId: string;
