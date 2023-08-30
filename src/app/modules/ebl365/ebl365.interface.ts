@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Model, Types } from 'mongoose';
+import { Document, Model, Types } from 'mongoose';
 import { ITerminal } from '../terminal/terminal.interface';
 
-export type IEbl365 = {
+export type IEbl365 = Document & {
   machines: Types.ObjectId[] | ITerminal[];
   ebl365Name: string;
   ebl365Address: string;

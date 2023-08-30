@@ -1,10 +1,12 @@
 import httpStatus from 'http-status';
-import { SortOrder } from 'mongoose';
+import mongoose, { SortOrder } from 'mongoose';
 import ApiError from '../../../errors/apiError';
 import { PaginationHelpers } from '../../../helper/paginationHelper';
 import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
+import { IEbl365 } from '../ebl365/ebl365.interface';
+import { Ebl365 } from '../ebl365/ebl365.model';
 import { TerminalSearchableFields } from './terminal.constant';
 import { ITerminal } from './terminal.interface';
 import { Terminal } from './terminal.model';
@@ -114,10 +116,56 @@ const deleteTerminal = async (id: string): Promise<ITerminal | null> => {
   return result;
 };
 
+const createTerminalIntoEbl365 = async (
+  payload: ITerminal,
+): Promise<ITerminal | null> => {
+  let newTerminal: ITerminal | null;
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const ebl365: IEbl365 | null = await Ebl365.findOne({
+      _id: payload.terminal365,
+    }).session(session);
+
+    if (!ebl365) {
+      throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
+    }
+
+    const createdTerminal = await Terminal.create([payload], { session });
+    newTerminal = createdTerminal[0];
+
+    console.log('newTerminal', newTerminal);
+
+    const res = await Ebl365.updateOne(
+      { _id: payload.terminal365 },
+      {
+        $push: {
+          machines: newTerminal._id,
+        },
+      },
+      { session },
+    );
+
+    console.log('res', res);
+
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+
+  return newTerminal;
+};
+
 export const TerminalService = {
   createTerminal,
   getAllTerminal,
   getSingleTerminal,
   updateTerminal,
   deleteTerminal,
+  createTerminalIntoEbl365,
 };

@@ -1,4 +1,5 @@
-import { Model } from 'mongoose';
+import { Document, Model, Types } from 'mongoose';
+import { IEbl365 } from '../ebl365/ebl365.interface';
 import {
   TerminalBrandName,
   TerminalStatus,
@@ -32,6 +33,7 @@ export type ITerminal = Document & {
     contactNumber: string;
   };
   createdUser?: string;
+  terminal365?: Types.ObjectId | IEbl365;
 };
 
 export type TerminalModel = Model<ITerminal, Record<string, unknown>>;
