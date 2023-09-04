@@ -111,10 +111,6 @@ const getSingleEbl365 = async (id: string): Promise<IEbl365 | null> => {
   }
 
   const result = await Ebl365.findById(id).populate('machines');
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
-  }
-
   return result;
 };
 

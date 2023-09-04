@@ -1,0 +1,33 @@
+export const IssueFormFilterableFields = [
+  'searchTerm',
+  'id',
+  'ebl365',
+  'acProblem',
+  'lightProblem',
+  'machineProblem',
+  'mineralBoardProblem',
+  'roofCeilingProblem',
+  'wallProblem',
+  'aicoProblem',
+  'tilesProblem',
+  'wastageBinProblem',
+  'dvrProblem',
+  'upsProblem',
+  'othersProblem',
+];
+
+export const IssueFormSearchableFields = [
+  'ebl365',
+  'acProblem',
+  'lightProblem',
+  'machineProblem',
+  'mineralBoardProblem',
+  'roofCeilingProblem',
+  'wallProblem',
+  'aicoProblem',
+  'tilesProblem',
+  'wastageBinProblem',
+  'dvrProblem',
+  'upsProblem',
+  'othersProblem',
+];
