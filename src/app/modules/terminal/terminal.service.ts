@@ -61,6 +61,7 @@ const getAllTerminal = async (
       : {};
 
   const result = await Terminal.find(whereConditions)
+    .populate('terminal365')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -82,7 +83,7 @@ const getSingleTerminal = async (id: string): Promise<ITerminal | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
   }
 
-  const result = await Terminal.findById(id);
+  const result = await Terminal.findById(id).populate('terminal365');
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
   }
@@ -136,9 +137,7 @@ const createTerminalIntoEbl365 = async (
     const createdTerminal = await Terminal.create([payload], { session });
     newTerminal = createdTerminal[0];
 
-    console.log('newTerminal', newTerminal);
-
-    const res = await Ebl365.updateOne(
+    await Ebl365.updateOne(
       { _id: payload.terminal365 },
       {
         $push: {
@@ -147,8 +146,6 @@ const createTerminalIntoEbl365 = async (
       },
       { session },
     );
-
-    console.log('res', res);
 
     await session.commitTransaction();
   } catch (error) {
