@@ -6,6 +6,7 @@ import { PaginationHelpers } from '../../../helper/paginationHelper';
 import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
+import { TerminalStatus } from '../terminal/terminal.constant';
 import { ITerminal } from '../terminal/terminal.interface';
 import { Ebl365SearchableFields } from './ebl365.constant';
 import { IEbl365 } from './ebl365.interface';
@@ -13,38 +14,8 @@ import { Ebl365 } from './ebl365.model';
 
 const createEbl365 = async (payload: IEbl365): Promise<IEbl365 | null> => {
   const result = await (await Ebl365.create(payload)).populate('machines');
-
-  const machineTypeCounts: { [key: string]: number } = {};
-
-  for (const machine of result.machines as ITerminal[]) {
-    if (machineTypeCounts[machine.terminalType]) {
-      machineTypeCounts[machine.terminalType] += 1;
-    } else {
-      machineTypeCounts[machine.terminalType] = 1;
-    }
-  }
-
-  const boothDevicesArray = Object.keys(machineTypeCounts).map(
-    type => `${machineTypeCounts[type]} ${type}`,
-  );
-
-  let boothDevicesStr = '';
-  if (boothDevicesArray.length > 1) {
-    boothDevicesStr =
-      boothDevicesArray.slice(0, -1).join(', ') +
-      ' and ' +
-      boothDevicesArray.slice(-1);
-  } else {
-    boothDevicesStr = boothDevicesArray[0] || '';
-  }
-
-  result.boothDevices = boothDevicesStr;
-
-  await Ebl365.findByIdAndUpdate(result._id, { boothDevices: boothDevicesStr });
-
   return result;
 };
-
 const getAllEbl365 = async (
   filters: Partial<IConstantFilters>,
   paginationOptions: IPaginationOptions,
@@ -87,11 +58,54 @@ const getAllEbl365 = async (
         }
       : {};
 
-  const result = await Ebl365.find(whereConditions)
+  const results = await Ebl365.find(whereConditions)
     .populate('machines')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
+
+  for (const result of results) {
+    const machineTypeCounts: { [key: string]: number } = {};
+    let noOfRunningMachine = 0;
+
+    for (const machine of result.machines as ITerminal[]) {
+      if (machineTypeCounts[machine.terminalType]) {
+        machineTypeCounts[machine.terminalType] += 1;
+      } else {
+        machineTypeCounts[machine.terminalType] = 1;
+      }
+
+      if (machine.terminalStatus === TerminalStatus.ACTIVE) {
+        noOfRunningMachine += 1;
+      }
+    }
+
+    const boothDevicesArray = Object.keys(machineTypeCounts).map(
+      type => `${machineTypeCounts[type]} ${type}`,
+    );
+
+    let boothDevicesStr = '';
+    if (boothDevicesArray.length > 1) {
+      boothDevicesStr =
+        boothDevicesArray.slice(0, -1).join(', ') +
+        ' and ' +
+        boothDevicesArray.slice(-1);
+    } else {
+      boothDevicesStr = boothDevicesArray[0] || '';
+    }
+
+    const noOfAvailableMachine = result.machines ? result.machines.length : 0;
+
+    result.boothDevices = boothDevicesStr;
+    result.noOfRunningMachine = noOfRunningMachine;
+    result.noOfAvailableMachine = noOfAvailableMachine;
+
+    await Ebl365.findByIdAndUpdate(result._id, {
+      boothDevices: boothDevicesStr,
+      noOfRunningMachine,
+      noOfAvailableMachine,
+    });
+  }
 
   const total = await Ebl365.countDocuments();
   return {
@@ -100,7 +114,7 @@ const getAllEbl365 = async (
       limit,
       total,
     },
-    data: result,
+    data: results,
   };
 };
 

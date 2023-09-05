@@ -3,11 +3,6 @@ import { TerminalController } from './terminal.controller';
 
 const router = express.Router();
 
-router.post(
-  '/create-terminal-ebl',
-  TerminalController.createTerminalIntoEbl365,
-);
-
 router.post('/', TerminalController.createTerminal);
 
 router.get('/', TerminalController.getAllTerminal);

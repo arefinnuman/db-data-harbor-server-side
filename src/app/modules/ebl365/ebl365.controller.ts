@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { paginationFields } from '../../../constants/pagination';
@@ -10,6 +11,7 @@ import { Ebl365Service } from './ebl365.service';
 
 const createEbl365 = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
+
   const result = await Ebl365Service.createEbl365(data);
 
   sendResponse(res, {

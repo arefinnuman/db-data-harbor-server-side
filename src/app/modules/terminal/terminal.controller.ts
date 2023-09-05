@@ -15,7 +15,7 @@ const createTerminal = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Terminal Created Successfully',
+    message: `Terminal created successfully`,
     data: result,
   });
 });
@@ -76,25 +76,10 @@ const deleteTerminal = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const createTerminalIntoEbl365 = catchAsync(
-  async (req: Request, res: Response) => {
-    const { ...data } = req.body;
-    const result = await TerminalService.createTerminalIntoEbl365(data);
-
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: `Terminal created successfully`,
-      data: result,
-    });
-  },
-);
-
 export const TerminalController = {
   createTerminal,
   getAllTerminal,
   getSingleTerminal,
   updateTerminal,
   deleteTerminal,
-  createTerminalIntoEbl365,
 };

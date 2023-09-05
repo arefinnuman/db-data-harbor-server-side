@@ -104,7 +104,7 @@ const TerminalSchema = new Schema(
     createdUser: {
       type: String,
     },
-    terminal365: {
+    ebl365: {
       type: Schema.Types.ObjectId,
       ref: 'Ebl365',
     },

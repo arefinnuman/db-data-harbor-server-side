@@ -33,7 +33,7 @@ export type ITerminal = Document & {
     contactNumber: string;
   };
   createdUser?: string;
-  terminal365?: Types.ObjectId | IEbl365;
+  ebl365?: Types.ObjectId | IEbl365;
 };
 
 export type TerminalModel = Model<ITerminal, Record<string, unknown>>;

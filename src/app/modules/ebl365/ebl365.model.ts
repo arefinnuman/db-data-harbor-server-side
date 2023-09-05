@@ -68,11 +68,9 @@ const Ebl365Schema = new Schema(
     },
     noOfAvailableMachine: {
       type: Number,
-      required: true,
     },
     noOfRunningMachine: {
       type: Number,
-      required: true,
     },
     divisionId: {
       type: String,

@@ -14,8 +14,42 @@ import { Terminal } from './terminal.model';
 const createTerminal = async (
   payload: ITerminal,
 ): Promise<ITerminal | null> => {
-  const result = await Terminal.create(payload);
-  return result;
+  let newTerminal: ITerminal | null;
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const ebl365: IEbl365 | null = await Ebl365.findOne({
+      _id: payload.ebl365,
+    }).session(session);
+
+    if (!ebl365) {
+      throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
+    }
+
+    const createdTerminal = await Terminal.create([payload], { session });
+    newTerminal = createdTerminal[0];
+
+    await Ebl365.updateOne(
+      { _id: payload.ebl365 },
+      {
+        $push: {
+          machines: newTerminal._id,
+        },
+      },
+      { session },
+    );
+
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+
+  return newTerminal;
 };
 
 const getAllTerminal = async (
@@ -61,7 +95,7 @@ const getAllTerminal = async (
       : {};
 
   const result = await Terminal.find(whereConditions)
-    .populate('terminal365')
+    .populate('ebl365')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -83,7 +117,7 @@ const getSingleTerminal = async (id: string): Promise<ITerminal | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
   }
 
-  const result = await Terminal.findById(id).populate('terminal365');
+  const result = await Terminal.findById(id).populate('ebl365');
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
   }
@@ -108,54 +142,38 @@ const updateTerminal = async (
 };
 
 const deleteTerminal = async (id: string): Promise<ITerminal | null> => {
-  const isExist = await Terminal.findOne({ _id: id });
-  if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
-  }
-
-  const result = await Terminal.findOneAndDelete({ _id: id }, { new: true });
-  return result;
-};
-
-const createTerminalIntoEbl365 = async (
-  payload: ITerminal,
-): Promise<ITerminal | null> => {
-  let newTerminal: ITerminal | null;
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
-    const ebl365: IEbl365 | null = await Ebl365.findOne({
-      _id: payload.terminal365,
+    const terminalToDelete: ITerminal | null = await Terminal.findOne({
+      _id: id,
     }).session(session);
-
-    if (!ebl365) {
-      throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
+    if (!terminalToDelete) {
+      throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
     }
 
-    const createdTerminal = await Terminal.create([payload], { session });
-    newTerminal = createdTerminal[0];
+    const result = await Terminal.findByIdAndDelete(id).session(session);
 
     await Ebl365.updateOne(
-      { _id: payload.terminal365 },
+      { machines: id },
       {
-        $push: {
-          machines: newTerminal._id,
+        $pull: {
+          machines: id,
         },
       },
       { session },
     );
 
     await session.commitTransaction();
+    return result;
   } catch (error) {
     await session.abortTransaction();
     throw error;
   } finally {
     await session.endSession();
   }
-
-  return newTerminal;
 };
 
 export const TerminalService = {
@@ -164,5 +182,4 @@ export const TerminalService = {
   getSingleTerminal,
   updateTerminal,
   deleteTerminal,
-  createTerminalIntoEbl365,
 };
