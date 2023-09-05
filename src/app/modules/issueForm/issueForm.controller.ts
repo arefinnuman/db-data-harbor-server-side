@@ -76,10 +76,77 @@ const deleteIssueForm = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateToResolve = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await IssueFormService.updateToResolve(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `IssueForm updated successfully`,
+    data: result,
+  });
+});
+
+const getPendingIssues = catchAsync(async (req: Request, res: Response) => {
+  const result = await IssueFormService.getPendingIssues();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `IssueForm data fetched successfully`,
+    data: result,
+  });
+});
+
+const getPendingIssuesByEbl365 = catchAsync(
+  async (req: Request, res: Response) => {
+    const ebl365 = req.params.id;
+    const result = await IssueFormService.getPendingIssuesByEbl365(ebl365);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `IssueForm data fetched successfully`,
+      data: result,
+    });
+  },
+);
+
+const getResolvedIssues = catchAsync(async (req: Request, res: Response) => {
+  const result = await IssueFormService.getResolvedIssues();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `IssueForm data fetched successfully`,
+    data: result,
+  });
+});
+
+const getResolvedIssuesByEbl365 = catchAsync(
+  async (req: Request, res: Response) => {
+    const ebl365 = req.params.id;
+    const result = await IssueFormService.getResolvedIssuesByEbl365(ebl365);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `IssueForm data fetched successfully`,
+      data: result,
+    });
+  },
+);
+
 export const IssueFormController = {
   createIssueForm,
   getAllIssueForm,
   getSingleIssueForm,
   updateIssueForm,
   deleteIssueForm,
+  updateToResolve,
+  getPendingIssues,
+  getResolvedIssues,
+  getPendingIssuesByEbl365,
+  getResolvedIssuesByEbl365,
 };

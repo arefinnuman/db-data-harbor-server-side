@@ -17,9 +17,9 @@ const createIssueForm = async (
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
   }
-
-  const result = await (await IssueForm.create(payload)).populate('ebl365');
-  return result;
+  const result = await IssueForm.create(payload);
+  const populateResult = result.populate('ebl365');
+  return populateResult;
 };
 
 const getAllIssueForm = async (
@@ -116,10 +116,78 @@ const deleteIssueForm = async (id: string): Promise<IIssueForm | null> => {
   return result;
 };
 
+const updateToResolve = async (id: string): Promise<IIssueForm | null> => {
+  const isExist = await IssueForm.findOne({ _id: id });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
+  }
+
+  const result = await IssueForm.findOneAndUpdate(
+    { _id: id },
+    {
+      issueStatus: 'resolved',
+    },
+    {
+      new: true,
+    },
+  );
+  return result;
+};
+
+const getPendingIssues = async (): Promise<IIssueForm[] | null> => {
+  const result = await IssueForm.find({ issueStatus: 'pending' }).populate(
+    'ebl365',
+  );
+  return result;
+};
+
+const getPendingIssuesByEbl365 = async (
+  ebl365: string,
+): Promise<IIssueForm[] | null> => {
+  const ifExist = await IssueForm.findOne({ ebl365: ebl365 });
+  if (!ifExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
+  }
+
+  const result = await IssueForm.find({
+    ebl365: ebl365,
+    issueStatus: 'pending',
+  }).populate('ebl365');
+
+  return result;
+};
+
+const getResolvedIssues = async (): Promise<IIssueForm[] | null> => {
+  const result = await IssueForm.find({ issueStatus: 'resolved' }).populate(
+    'ebl365',
+  );
+  return result;
+};
+
+const getResolvedIssuesByEbl365 = async (
+  ebl365: string,
+): Promise<IIssueForm[] | null> => {
+  const ifExist = await IssueForm.findOne({ ebl365: ebl365 });
+  if (!ifExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
+  }
+
+  const result = await IssueForm.find({
+    ebl365: ebl365,
+    issueStatus: 'resolved',
+  }).populate('ebl365');
+  return result;
+};
+
 export const IssueFormService = {
   createIssueForm,
   getAllIssueForm,
   getSingleIssueForm,
   updateIssueForm,
   deleteIssueForm,
+  updateToResolve,
+  getPendingIssues,
+  getResolvedIssues,
+  getPendingIssuesByEbl365,
+  getResolvedIssuesByEbl365,
 };

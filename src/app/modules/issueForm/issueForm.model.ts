@@ -44,6 +44,27 @@ const IssueFormSchema = new Schema(
     othersProblem: {
       type: String,
     },
+    issueStatus: {
+      type: String,
+      enum: ['pending', 'resolved'],
+      default: 'pending',
+    },
+    issueSubmittedDate: {
+      type: Date,
+      default: Date.now,
+    },
+    issueResolvedDate: {
+      type: Date,
+    },
+    issueSubmittedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      // required: true,
+    },
+    issueResolvedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

@@ -3,6 +3,16 @@ import { IssueFormController } from './issueForm.controller';
 
 const router = express.Router();
 
+router.patch('/resolve/:id', IssueFormController.updateToResolve);
+
+router.get('/pending', IssueFormController.getPendingIssues);
+
+router.get('/pending/:id', IssueFormController.getPendingIssuesByEbl365);
+
+router.get('/resolved', IssueFormController.getResolvedIssues);
+
+router.get('/resolved/:id', IssueFormController.getResolvedIssuesByEbl365);
+
 router.post('/', IssueFormController.createIssueForm);
 
 router.get('/', IssueFormController.getAllIssueForm);

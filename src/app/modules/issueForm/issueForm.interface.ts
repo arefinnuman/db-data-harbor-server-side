@@ -15,6 +15,11 @@ export type IIssueForm = Document & {
   dvrProblem?: string;
   upsProblem?: string;
   othersProblem?: string;
+  issueStatus: string;
+  issueSubmittedDate: Date;
+  issueResolvedDate?: Date;
+  issueSubmittedBy: Types.ObjectId;
+  issueResolvedBy?: Types.ObjectId;
 };
 
 export type IssueFormModel = Model<IIssueForm, Record<string, unknown>>;
