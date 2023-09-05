@@ -1,4 +1,5 @@
 import express from 'express';
+import { BoothManagementRoutes } from '../modules/boothManagement/boothManagement.routes';
 import { Ebl365Routes } from '../modules/ebl365/ebl365.routes';
 import { IssueFormRoutes } from '../modules/issueForm/issueForm.routes';
 import { TerminalRoutes } from '../modules/terminal/terminal.routes';
@@ -16,6 +17,10 @@ const moduleRoutes = [
   {
     path: '/issue-form',
     route: IssueFormRoutes,
+  },
+  {
+    path: '/booth-management',
+    route: BoothManagementRoutes,
   },
 ];
 
