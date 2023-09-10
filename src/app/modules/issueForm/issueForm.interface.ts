@@ -1,8 +1,8 @@
 import { Document, Model, Types } from 'mongoose';
-import { IEbl365 } from '../ebl365/ebl365.interface';
+import { IBoothManagement } from '../boothManagement/boothManagement.interface';
 
 export type IIssueForm = Document & {
-  ebl365: Types.ObjectId | IEbl365;
+  boothManagement: Types.ObjectId | IBoothManagement;
   machineProblem?: string;
   acProblem?: string;
   lightProblem?: string;

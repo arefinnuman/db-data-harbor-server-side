@@ -1,11 +1,11 @@
 import httpStatus from 'http-status';
-import { SortOrder } from 'mongoose';
+import mongoose, { SortOrder } from 'mongoose';
 import ApiError from '../../../errors/apiError';
 import { PaginationHelpers } from '../../../helper/paginationHelper';
 import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { Ebl365 } from '../ebl365/ebl365.model';
+import { BoothManagement } from '../boothManagement/boothManagement.model';
 import { IssueFormSearchableFields } from './issueForm.constant';
 import { IIssueForm } from './issueForm.interface';
 import { IssueForm } from './issueForm.model';
@@ -13,13 +13,46 @@ import { IssueForm } from './issueForm.model';
 const createIssueForm = async (
   payload: IIssueForm,
 ): Promise<IIssueForm | null> => {
-  const isExist = await Ebl365.findById(payload.ebl365);
+  const isExist = await BoothManagement.findById(payload.boothManagement);
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
   }
-  const result = await IssueForm.create(payload);
-  const populateResult = result.populate('ebl365');
-  return populateResult;
+
+  const session = await mongoose.startSession();
+  let newIssueForm: IIssueForm | null;
+
+  try {
+    session.startTransaction();
+
+    const createdIssueForm = await IssueForm.create([payload], { session });
+    newIssueForm = createdIssueForm[0];
+
+    await BoothManagement.updateOne(
+      { _id: payload.boothManagement },
+      {
+        $push: {
+          issues: newIssueForm._id,
+        },
+      },
+      { session },
+    );
+
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+  const populatedIssueForm = await newIssueForm.populate({
+    path: 'boothManagement',
+    populate: {
+      path: 'issues',
+      model: 'IssueForm',
+    },
+  });
+
+  return populatedIssueForm;
 };
 
 const getAllIssueForm = async (
@@ -65,7 +98,13 @@ const getAllIssueForm = async (
       : {};
 
   const result = await IssueForm.find(whereConditions)
-    .populate('ebl365')
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -87,7 +126,14 @@ const getSingleIssueForm = async (id: string): Promise<IIssueForm | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
   }
 
-  const result = await IssueForm.findById(id).populate('ebl365');
+  const result = await IssueForm.findById(id).populate({
+    path: 'boothManagement',
+    populate: {
+      path: 'issues',
+      model: 'IssueForm',
+    },
+  });
+
   return result;
 };
 
@@ -107,13 +153,39 @@ const updateIssueForm = async (
 };
 
 const deleteIssueForm = async (id: string): Promise<IIssueForm | null> => {
-  const isExist = await IssueForm.findOne({ _id: id });
-  if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
-  }
+  const session = await mongoose.startSession();
 
-  const result = await IssueForm.findOneAndDelete({ _id: id }, { new: true });
-  return result;
+  try {
+    session.startTransaction();
+
+    const issueFormToDelete: IIssueForm | null = await IssueForm.findOne({
+      _id: id,
+    }).session(session);
+
+    if (!issueFormToDelete) {
+      throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
+    }
+
+    const result = await IssueForm.findByIdAndDelete(id).session(session);
+
+    await BoothManagement.updateOne(
+      { issues: id },
+      {
+        $pull: {
+          issues: id,
+        },
+      },
+      { session },
+    );
+
+    await session.commitTransaction();
+    return result;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
 };
 
 const updateToResolve = async (id: string): Promise<IIssueForm | null> => {
@@ -136,7 +208,7 @@ const updateToResolve = async (id: string): Promise<IIssueForm | null> => {
 
 const getPendingIssues = async (): Promise<IIssueForm[] | null> => {
   const result = await IssueForm.find({ issueStatus: 'pending' }).populate(
-    'ebl365',
+    'boothManagement',
   );
   return result;
 };
@@ -152,14 +224,14 @@ const getPendingIssuesByEbl365 = async (
   const result = await IssueForm.find({
     ebl365: ebl365,
     issueStatus: 'pending',
-  }).populate('ebl365');
+  }).populate('boothManagement');
 
   return result;
 };
 
 const getResolvedIssues = async (): Promise<IIssueForm[] | null> => {
   const result = await IssueForm.find({ issueStatus: 'resolved' }).populate(
-    'ebl365',
+    'boothManagement',
   );
   return result;
 };
@@ -175,7 +247,7 @@ const getResolvedIssuesByEbl365 = async (
   const result = await IssueForm.find({
     ebl365: ebl365,
     issueStatus: 'resolved',
-  }).populate('ebl365');
+  }).populate('boothManagement');
   return result;
 };
 

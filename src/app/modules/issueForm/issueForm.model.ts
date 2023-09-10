@@ -3,9 +3,9 @@ import { IIssueForm, IssueFormModel } from './issueForm.interface';
 
 const IssueFormSchema = new Schema(
   {
-    ebl365: {
+    boothManagement: {
       type: Schema.Types.ObjectId,
-      ref: 'Ebl365',
+      ref: 'BoothManagement',
       required: true,
     },
     acProblem: {
@@ -59,7 +59,6 @@ const IssueFormSchema = new Schema(
     issueSubmittedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      // required: true,
     },
     issueResolvedBy: {
       type: Schema.Types.ObjectId,
