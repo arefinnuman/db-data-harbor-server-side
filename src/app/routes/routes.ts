@@ -1,4 +1,5 @@
 import express from 'express';
+import { BoothAcquisitionRoutes } from '../modules/boothAcquisition/boothAcquisition.routes';
 import { BoothManagementRoutes } from '../modules/boothManagement/boothManagement.routes';
 import { Ebl365Routes } from '../modules/ebl365/ebl365.routes';
 import { IssueFormRoutes } from '../modules/issueForm/issueForm.routes';
@@ -21,6 +22,10 @@ const moduleRoutes = [
   {
     path: '/booth-management',
     route: BoothManagementRoutes,
+  },
+  {
+    path: '/booth-acquisition',
+    route: BoothAcquisitionRoutes,
   },
 ];
 
