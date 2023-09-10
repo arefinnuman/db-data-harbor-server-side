@@ -1,5 +1,3 @@
-// Its boothAcquisition.controller.ts file:
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-undef */
 
@@ -37,70 +35,70 @@ const createBoothAcquisition = catchAsync(
   },
 );
 
+const getAllBoothAcquisition = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await BoothAcquisitionService.getAllBoothAcquisition();
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'BoothAcquisition Data Fetched Successfully',
+      data: result,
+    });
+  },
+);
+
+const getSingleBoothAcquisition = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await BoothAcquisitionService.getSingleBoothAcquisition(id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `BoothAcquisition data fetched successfully`,
+      data: result,
+    });
+  },
+);
+
+const updateBoothAcquisition = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const data = req.body;
+
+    const result = await BoothAcquisitionService.updateBoothAcquisition(
+      id,
+      data,
+    );
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `BoothAcquisition updated successfully`,
+      data: result,
+    });
+  },
+);
+
+const deleteBoothAcquisition = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await BoothAcquisitionService.deleteBoothAcquisition(id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `BoothAcquisition deleted successfully`,
+      data: result || null,
+    });
+  },
+);
+
 export const BoothAcquisitionController = {
   createBoothAcquisition,
+  getAllBoothAcquisition,
+  getSingleBoothAcquisition,
+  updateBoothAcquisition,
+  deleteBoothAcquisition,
 };
-
-// const getAllBoothManagement = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const filters = pick(req.query, BoothManagementFilterableFields);
-//     const paginationOptions = pick(req.query, paginationFields);
-
-//     const result = await BoothManagementService.getAllBoothManagement(
-//       filters,
-//       paginationOptions,
-//     );
-
-//     sendResponse<IBoothManagement[]>(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: `BoothManagement Data Fetched Successfully`,
-//       meta: result.meta,
-//       data: result.data,
-//     });
-//   },
-// );
-
-// const getSingleBoothManagement = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const id = req.params.id;
-//     const result = await BoothManagementService.getSingleBoothManagement(id);
-
-//     sendResponse(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: `BoothManagement data fetched successfully`,
-//       data: result,
-//     });
-//   },
-// );
-
-// const updateBoothManagement = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const id = req.params.id;
-//     const data = req.body;
-
-//     const result = await BoothManagementService.updateBoothManagement(id, data);
-
-//     sendResponse(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: `BoothManagement updated successfully`,
-//       data: result,
-//     });
-//   },
-// );
-
-// const deleteBoothManagement = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const id = req.params.id;
-//     const result = await BoothManagementService.deleteBoothManagement(id);
-
-//     sendResponse(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: `BoothManagement deleted successfully`,
-//       data: result || null,
-//     });
-//   },
-// );

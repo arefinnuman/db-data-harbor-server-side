@@ -1,5 +1,3 @@
-// Its boothAcquisition.model.ts file:
-
 import { Schema, model } from 'mongoose';
 import {
   BoothAcquisitionModel,

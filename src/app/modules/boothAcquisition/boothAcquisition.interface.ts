@@ -1,5 +1,3 @@
-// Its boothAcquisition.interface.ts file
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document, Model, Types } from 'mongoose';
 import { IEbl365 } from '../ebl365/ebl365.interface';

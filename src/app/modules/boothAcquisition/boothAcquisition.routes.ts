@@ -1,5 +1,3 @@
-// Its boothAcquisition.routes.ts file:
-
 import express from 'express';
 import { upload } from '../../../config/multer';
 import { BoothAcquisitionController } from './boothAcquisition.controller';
@@ -14,5 +12,13 @@ router.post(
   ]),
   BoothAcquisitionController.createBoothAcquisition,
 );
+
+router.get('/', BoothAcquisitionController.getAllBoothAcquisition);
+
+router.delete('/:id', BoothAcquisitionController.deleteBoothAcquisition);
+
+router.patch('/:id', BoothAcquisitionController.updateBoothAcquisition);
+
+router.get('/:id', BoothAcquisitionController.getSingleBoothAcquisition);
 
 export const BoothAcquisitionRoutes = router;
