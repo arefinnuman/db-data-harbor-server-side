@@ -148,6 +148,11 @@ const deleteUser = async (employeeId: string): Promise<IUser | null> => {
 const updateToSuperAdmin = async (
   employeeId: string,
 ): Promise<IUser | null> => {
+  const isExist = await User.findOne({ employeeId });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found !');
+  }
+
   const result = await User.findOneAndUpdate(
     {
       employeeId,
@@ -155,11 +160,19 @@ const updateToSuperAdmin = async (
     {
       role: 'super_admin',
     },
+    {
+      new: true,
+    },
   );
   return result;
 };
 
 const updateToAdmin = async (employeeId: string): Promise<IUser | null> => {
+  const isExist = await User.findOne({ employeeId });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found !');
+  }
+
   const result = await User.findOneAndUpdate(
     {
       employeeId,
@@ -167,29 +180,88 @@ const updateToAdmin = async (employeeId: string): Promise<IUser | null> => {
     {
       role: 'admin',
     },
+    {
+      new: true,
+    },
   );
   return result;
 };
 
 const updateToMaker = async (employeeId: string): Promise<IUser | null> => {
+  const isExist = await User.findOne({ employeeId });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found !');
+  }
+
   const result = await User.findOneAndUpdate(
     {
       employeeId,
     },
     {
       role: 'maker',
+    },
+    {
+      new: true,
     },
   );
   return result;
 };
 
 const updateToViewer = async (employeeId: string): Promise<IUser | null> => {
+  const isExist = await User.findOne({ employeeId });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found !');
+  }
+
   const result = await User.findOneAndUpdate(
     {
       employeeId,
     },
     {
-      role: 'maker',
+      role: 'viewer',
+    },
+    {
+      new: true,
+    },
+  );
+  return result;
+};
+
+const approveAnUser = async (employeeId: string): Promise<IUser | null> => {
+  const isExist = await User.findOne({ employeeId });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found !');
+  }
+
+  const result = await User.findOneAndUpdate(
+    {
+      employeeId,
+    },
+    {
+      approved: true,
+    },
+    {
+      new: true,
+    },
+  );
+  return result;
+};
+
+const rejectAnUser = async (employeeId: string): Promise<IUser | null> => {
+  const isExist = await User.findOne({ employeeId });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found !');
+  }
+
+  const result = await User.findOneAndUpdate(
+    {
+      employeeId,
+    },
+    {
+      approved: false,
+    },
+    {
+      new: true,
     },
   );
   return result;
@@ -205,4 +277,6 @@ export const UserService = {
   updateToAdmin,
   updateToMaker,
   updateToViewer,
+  approveAnUser,
+  rejectAnUser,
 };

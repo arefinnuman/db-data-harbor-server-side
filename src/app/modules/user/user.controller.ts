@@ -77,10 +77,88 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateToSuperAdmin = catchAsync(async (req: Request, res: Response) => {
+  const employeeId = req.params.employeeId;
+  const result = await UserService.updateToSuperAdmin(employeeId);
+
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully !',
+    data: result,
+  });
+});
+
+const updateToAdmin = catchAsync(async (req: Request, res: Response) => {
+  const employeeId = req.params.employeeId;
+  const result = await UserService.updateToAdmin(employeeId);
+
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully !',
+    data: result,
+  });
+});
+
+const updateToMaker = catchAsync(async (req: Request, res: Response) => {
+  const employeeId = req.params.employeeId;
+  const result = await UserService.updateToMaker(employeeId);
+
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully !',
+    data: result,
+  });
+});
+
+const updateToViewer = catchAsync(async (req: Request, res: Response) => {
+  const employeeId = req.params.employeeId;
+  const result = await UserService.updateToViewer(employeeId);
+
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully !',
+    data: result,
+  });
+});
+
+const approveAnUser = catchAsync(async (req: Request, res: Response) => {
+  const employeeId = req.params.employeeId;
+  const result = await UserService.approveAnUser(employeeId);
+
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully !',
+    data: result,
+  });
+});
+
+const rejectAnUser = catchAsync(async (req: Request, res: Response) => {
+  const employeeId = req.params.employeeId;
+  const result = await UserService.rejectAnUser(employeeId);
+
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully !',
+    data: result,
+  });
+});
+
 export const UserController = {
   createUser,
   getAllUser,
   getSingleUser,
   updateUser,
   deleteUser,
+  updateToSuperAdmin,
+  updateToAdmin,
+  updateToMaker,
+  updateToViewer,
+  approveAnUser,
+  rejectAnUser,
 };

@@ -11,16 +11,31 @@ router.post(
   UserController.createUser,
 );
 
+router.patch(
+  '/:employeeId/update-to-super-admin',
+  UserController.updateToSuperAdmin,
+);
+
+router.patch('/:employeeId/update-to-admin', UserController.updateToAdmin);
+
+router.patch('/:employeeId/update-to-maker', UserController.updateToMaker);
+
+router.patch('/:employeeId/update-to-viewer', UserController.updateToViewer);
+
+router.patch('/:employeeId/approve-user', UserController.approveAnUser);
+
+router.patch('/:employeeId/reject-user', UserController.rejectAnUser);
+
 router.get('/', UserController.getAllUser);
 
 router.get('/:id', UserController.getSingleUser);
 
 router.patch(
-  '/:id',
+  '/:employeeId',
   validateRequest(UserValidation.updateUserZodSchema),
   UserController.updateUser,
 );
 
-router.delete('/:id', UserController.deleteUser);
+router.delete('/:employeeId', UserController.deleteUser);
 
 export const UserRoutes = router;
