@@ -88,6 +88,18 @@ const updateToResolve = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateToPending = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await IssueFormService.updateToPending(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `IssueForm updated successfully`,
+    data: result,
+  });
+});
+
 const getPendingIssues = catchAsync(async (req: Request, res: Response) => {
   const result = await IssueFormService.getPendingIssues();
 
@@ -145,6 +157,7 @@ export const IssueFormController = {
   updateIssueForm,
   deleteIssueForm,
   updateToResolve,
+  updateToPending,
   getPendingIssues,
   getResolvedIssues,
   getPendingIssuesByEbl365,

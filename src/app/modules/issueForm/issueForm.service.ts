@@ -105,6 +105,13 @@ const getAllIssueForm = async (
         model: 'IssueForm',
       },
     })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    })
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -126,13 +133,21 @@ const getSingleIssueForm = async (id: string): Promise<IIssueForm | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
   }
 
-  const result = await IssueForm.findById(id).populate({
-    path: 'boothManagement',
-    populate: {
-      path: 'issues',
-      model: 'IssueForm',
-    },
-  });
+  const result = await IssueForm.findById(id)
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
 
   return result;
 };
@@ -148,7 +163,22 @@ const updateIssueForm = async (
 
   const result = await IssueForm.findOneAndUpdate({ _id: id }, payload, {
     new: true,
-  });
+  })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
+
   return result;
 };
 
@@ -202,14 +232,72 @@ const updateToResolve = async (id: string): Promise<IIssueForm | null> => {
     {
       new: true,
     },
-  );
+  )
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
+  return result;
+};
+
+const updateToPending = async (id: string): Promise<IIssueForm | null> => {
+  const isExist = await IssueForm.findOne({ _id: id });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
+  }
+
+  const result = await IssueForm.findOneAndUpdate(
+    { _id: id },
+    {
+      issueStatus: 'pending',
+    },
+    {
+      new: true,
+    },
+  )
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
   return result;
 };
 
 const getPendingIssues = async (): Promise<IIssueForm[] | null> => {
-  const result = await IssueForm.find({ issueStatus: 'pending' }).populate(
-    'boothManagement',
-  );
+  const result = await IssueForm.find({ issueStatus: 'pending' })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
   return result;
 };
 
@@ -224,15 +312,41 @@ const getPendingIssuesByEbl365 = async (
   const result = await IssueForm.find({
     ebl365: ebl365,
     issueStatus: 'pending',
-  }).populate('boothManagement');
+  })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
 
   return result;
 };
 
 const getResolvedIssues = async (): Promise<IIssueForm[] | null> => {
-  const result = await IssueForm.find({ issueStatus: 'resolved' }).populate(
-    'boothManagement',
-  );
+  const result = await IssueForm.find({ issueStatus: 'resolved' })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
   return result;
 };
 
@@ -247,7 +361,21 @@ const getResolvedIssuesByEbl365 = async (
   const result = await IssueForm.find({
     ebl365: ebl365,
     issueStatus: 'resolved',
-  }).populate('boothManagement');
+  })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'issues',
+        model: 'IssueForm',
+      },
+    })
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
   return result;
 };
 
@@ -258,6 +386,7 @@ export const IssueFormService = {
   updateIssueForm,
   deleteIssueForm,
   updateToResolve,
+  updateToPending,
   getPendingIssues,
   getResolvedIssues,
   getPendingIssuesByEbl365,

@@ -72,6 +72,7 @@ const getAllBoothManagement = async (
 
   const result = await BoothManagement.find(whereConditions)
     .populate('ebl365')
+    .populate('issues')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -95,7 +96,9 @@ const getSingleBoothManagement = async (
     throw new ApiError(httpStatus.NOT_FOUND, `BoothManagement not found`);
   }
 
-  const result = await BoothManagement.findById(id).populate('ebl365');
+  const result = await BoothManagement.findById(id)
+    .populate('ebl365')
+    .populate('issues');
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, `BoothManagement not found`);
   }

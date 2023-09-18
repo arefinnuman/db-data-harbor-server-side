@@ -11,7 +11,7 @@ const createBoothAcquisition = async (
 };
 
 const getAllBoothAcquisition = async (): Promise<IBoothAcquisition[]> => {
-  const result = await BoothAcquisition.find();
+  const result = await BoothAcquisition.find().populate('ebl365');
   return result;
 };
 
@@ -42,7 +42,7 @@ const updateBoothAcquisition = async (
 
   const result = await BoothAcquisition.findOneAndUpdate({ _id: id }, payload, {
     new: true,
-  });
+  }).populate('ebl365');
 
   return result;
 };

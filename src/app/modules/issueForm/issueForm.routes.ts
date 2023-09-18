@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.patch('/resolve/:id', IssueFormController.updateToResolve);
 
+router.patch('/pending/:id', IssueFormController.updateToPending);
+
 router.get('/pending', IssueFormController.getPendingIssues);
 
 router.get('/pending/:id', IssueFormController.getPendingIssuesByEbl365);

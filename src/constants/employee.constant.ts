@@ -30,3 +30,7 @@ export type IEmployeeFilters = {
   managementDepartment?: string;
   designation?: string;
 };
+
+export const gender = ['male', 'female'];
+
+export const bloodGroup = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
