@@ -108,12 +108,15 @@ userSchema.statics.isUserExist = async function (
   employeeId: string,
 ): Promise<Pick<
   IUser,
+  | 'id'
   | 'employeeId'
   | 'email'
   | 'password'
   | 'role'
+  | 'team'
   | 'needsPasswordChange'
   | 'approved'
+  | 'fullName'
 > | null> {
   return await User.findOne(
     { employeeId },
@@ -122,8 +125,10 @@ userSchema.statics.isUserExist = async function (
       password: 1,
       employeeId: 1,
       role: 1,
+      team: 1,
       needsPasswordChange: 1,
       approved: 1,
+      fullName: 1,
     },
   );
 };

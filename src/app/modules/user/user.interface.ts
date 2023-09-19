@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { Model } from 'mongoose';
+
+import { Document, Model, Types } from 'mongoose';
 
 export type UserName = {
   firstName: string;
@@ -7,7 +8,7 @@ export type UserName = {
   middleName: string;
 };
 
-export type IUser = {
+export type IUser = Document & {
   employeeId: string;
   email: string;
   password: string;
@@ -27,6 +28,7 @@ export type IUser = {
   photo?: string;
   needsPasswordChange: true | false;
   approved: true | false;
+  userId?: Types.ObjectId;
 };
 
 export type UserModel = {
@@ -35,12 +37,15 @@ export type UserModel = {
   ): Promise<
     Pick<
       IUser,
+      | 'id'
       | 'employeeId'
       | 'email'
       | 'password'
       | 'role'
+      | 'team'
       | 'needsPasswordChange'
       | 'approved'
+      | 'fullName'
     >
   >;
   isPasswordMatched(

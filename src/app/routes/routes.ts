@@ -1,4 +1,5 @@
 import express from 'express';
+import { AuthRoutes } from '../modules/auth/auth.routes';
 import { BoothAcquisitionRoutes } from '../modules/boothAcquisition/boothAcquisition.routes';
 import { BoothManagementRoutes } from '../modules/boothManagement/boothManagement.routes';
 import { Ebl365Routes } from '../modules/ebl365/ebl365.routes';
@@ -11,6 +12,10 @@ const moduleRoutes = [
   {
     path: '/users',
     route: UserRoutes,
+  },
+  {
+    path: '/auth',
+    route: AuthRoutes,
   },
   {
     path: '/terminals',

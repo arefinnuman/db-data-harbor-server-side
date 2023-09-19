@@ -4,13 +4,17 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../custom/catchAsync';
 import sendResponse from '../../../custom/sendResponse';
 import pick from '../../../interfaces/pick';
+import { IUser } from '../user/user.interface';
 import { TerminalFilterableFields } from './terminal.constant';
 import { ITerminal } from './terminal.interface';
 import { TerminalService } from './terminal.service';
 
 const createTerminal = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
-  const result = await TerminalService.createTerminal(data);
+  const user = req?.user;
+  console.log(user);
+
+  const result = await TerminalService.createTerminal(data, user as IUser);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -1,5 +1,6 @@
 import { Document, Model, Types } from 'mongoose';
 import { IEbl365 } from '../ebl365/ebl365.interface';
+import { IUser } from '../user/user.interface';
 import {
   TerminalBrandName,
   TerminalStatus,
@@ -16,7 +17,7 @@ export type ITerminal = Document & {
   glNumber: string;
   glCode: string;
   numberOfBpm: number;
-  insuranceLimit: string;
+  insuranceLimit: number;
   assetTagSerial: string;
   deploymentDate: Date;
   liveDate: Date;
@@ -32,7 +33,7 @@ export type ITerminal = Document & {
     name: string;
     contactNumber: string;
   };
-  createdUser?: string;
+  createdUser?: Types.ObjectId | IUser;
   ebl365?: Types.ObjectId | IEbl365;
 };
 

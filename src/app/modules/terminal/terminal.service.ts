@@ -7,13 +7,20 @@ import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IEbl365 } from '../ebl365/ebl365.interface';
 import { Ebl365 } from '../ebl365/ebl365.model';
+import { IUser } from '../user/user.interface';
 import { TerminalSearchableFields } from './terminal.constant';
 import { ITerminal } from './terminal.interface';
 import { Terminal } from './terminal.model';
 
 const createTerminal = async (
   payload: ITerminal,
+  user: IUser,
 ): Promise<ITerminal | null> => {
+  console.log(user);
+  const createdUserId = user.userId;
+
+  payload.createdUser = createdUserId;
+
   let newTerminal: ITerminal | null;
   const session = await mongoose.startSession();
 
@@ -96,6 +103,7 @@ const getAllTerminal = async (
 
   const result = await Terminal.find(whereConditions)
     .populate('ebl365')
+    .populate('createdUser')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -117,7 +125,9 @@ const getSingleTerminal = async (id: string): Promise<ITerminal | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
   }
 
-  const result = await Terminal.findById(id).populate('ebl365');
+  const result = await Terminal.findById(id)
+    .populate('ebl365')
+    .populate('createdUser');
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
   }

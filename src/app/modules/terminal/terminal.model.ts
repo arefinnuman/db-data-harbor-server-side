@@ -50,7 +50,7 @@ const TerminalSchema = new Schema(
       required: true,
     },
     insuranceLimit: {
-      type: String,
+      type: Number,
       required: true,
     },
     assetTagSerial: {
@@ -102,7 +102,8 @@ const TerminalSchema = new Schema(
       },
     },
     createdUser: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
     ebl365: {
       type: Schema.Types.ObjectId,

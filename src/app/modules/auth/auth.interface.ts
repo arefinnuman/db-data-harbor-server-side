@@ -7,7 +7,7 @@ export type ILoginUserResponse = {
   accessToken: string;
   refreshToken?: string;
   needsPasswordChange: boolean;
-  approvedByAdmin: boolean;
+  approved: boolean;
 };
 
 export type IRefreshTokenResponse = {
