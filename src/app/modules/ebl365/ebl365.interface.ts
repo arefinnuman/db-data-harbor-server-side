@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document, Model, Types } from 'mongoose';
 import { ITerminal } from '../terminal/terminal.interface';
+import { IUser } from '../user/user.interface';
 
 export type IEbl365 = Document & {
   machines?: Types.ObjectId[] | ITerminal[];
@@ -25,6 +26,7 @@ export type IEbl365 = Document & {
   upazilaOrThana: string;
   controlledBy: string;
   boothDevices?: string;
+  createdUser?: Types.ObjectId | IUser;
 };
 
 export type Ebl365Model = Model<IEbl365, Record<string, unknown>>;

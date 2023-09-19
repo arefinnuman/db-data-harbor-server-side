@@ -5,14 +5,16 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../custom/catchAsync';
 import sendResponse from '../../../custom/sendResponse';
 import pick from '../../../interfaces/pick';
+import { IUser } from '../user/user.interface';
 import { Ebl365FilterableFields } from './ebl365.constant';
 import { IEbl365 } from './ebl365.interface';
 import { Ebl365Service } from './ebl365.service';
 
 const createEbl365 = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
+  const user = req.user;
 
-  const result = await Ebl365Service.createEbl365(data);
+  const result = await Ebl365Service.createEbl365(data, user as IUser);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
