@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const authorization_1 = __importDefault(require("../../middleWares/authorization"));
+const validateRequest_1 = __importDefault(require("../../middleWares/validateRequest"));
+const user_constant_1 = require("./user.constant");
+const user_controller_1 = require("./user.controller");
+const user_validation_1 = require("./user.validation");
+const router = express_1.default.Router();
+router.post('/', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), (0, validateRequest_1.default)(user_validation_1.UserValidation.createUserZodSchema), user_controller_1.UserController.createUser);
+router.patch('/:employeeId/update-to-super-admin', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.updateToSuperAdmin);
+router.patch('/:employeeId/update-to-admin', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.updateToAdmin);
+router.patch('/:employeeId/update-to-maker', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.updateToMaker);
+router.patch('/:employeeId/update-to-viewer', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.updateToViewer);
+router.patch('/:employeeId/approve-user', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.approveAnUser);
+router.patch('/:employeeId/reject-user', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.rejectAnUser);
+router.get('/', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.getAllUser);
+router.get('/:id', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.getSingleUser);
+router.patch('/:employeeId', (0, validateRequest_1.default)(user_validation_1.UserValidation.updateUserZodSchema), user_controller_1.UserController.updateUser);
+router.delete('/:employeeId', user_controller_1.UserController.deleteUser);
+exports.UserRoutes = router;
