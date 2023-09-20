@@ -1,5 +1,7 @@
 import express from 'express';
 import { upload } from '../../../config/multer';
+import Authorization from '../../middleWares/authorization';
+import { ENUM_USER_ROLE } from '../user/user.constant';
 import { BoothAcquisitionController } from './boothAcquisition.controller';
 
 const router = express.Router();
@@ -10,15 +12,46 @@ router.post(
     { name: 'boardMemo', maxCount: 1 },
     { name: 'agreementBetweenEblAndBoothOwner', maxCount: 1 },
   ]),
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+  ),
   BoothAcquisitionController.createBoothAcquisition,
 );
 
-router.get('/', BoothAcquisitionController.getAllBoothAcquisition);
+router.get(
+  '/',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  BoothAcquisitionController.getAllBoothAcquisition,
+);
 
-router.delete('/:id', BoothAcquisitionController.deleteBoothAcquisition);
+router.delete(
+  '/:id',
+  Authorization(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  BoothAcquisitionController.deleteBoothAcquisition,
+);
 
-router.patch('/:id', BoothAcquisitionController.updateBoothAcquisition);
+router.patch(
+  '/:id',
+  Authorization(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  BoothAcquisitionController.updateBoothAcquisition,
+);
 
-router.get('/:id', BoothAcquisitionController.getSingleBoothAcquisition);
+router.get(
+  '/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  BoothAcquisitionController.getSingleBoothAcquisition,
+);
 
 export const BoothAcquisitionRoutes = router;

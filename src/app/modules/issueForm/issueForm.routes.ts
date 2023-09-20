@@ -1,28 +1,120 @@
 import express from 'express';
+import Authorization from '../../middleWares/authorization';
+import { ENUM_USER_ROLE } from '../user/user.constant';
 import { IssueFormController } from './issueForm.controller';
 
 const router = express.Router();
 
-router.patch('/resolve/:id', IssueFormController.updateToResolve);
+router.patch(
+  '/resolve/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+  ),
+  IssueFormController.updateToResolve,
+);
 
-router.patch('/pending/:id', IssueFormController.updateToPending);
+router.patch(
+  '/pending/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+  ),
+  IssueFormController.updateToPending,
+);
 
-router.get('/pending', IssueFormController.getPendingIssues);
+router.get(
+  '/pending',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  IssueFormController.getPendingIssues,
+);
 
-router.get('/pending/:id', IssueFormController.getPendingIssuesByEbl365);
+router.get(
+  '/pending/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  IssueFormController.getPendingIssuesByEbl365,
+);
 
-router.get('/resolved', IssueFormController.getResolvedIssues);
+router.get(
+  '/resolved',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  IssueFormController.getResolvedIssues,
+);
 
-router.get('/resolved/:id', IssueFormController.getResolvedIssuesByEbl365);
+router.get(
+  '/resolved/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  IssueFormController.getResolvedIssuesByEbl365,
+);
 
-router.post('/', IssueFormController.createIssueForm);
+router.post(
+  '/',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+  ),
+  IssueFormController.createIssueForm,
+);
 
-router.get('/', IssueFormController.getAllIssueForm);
+router.get(
+  '/',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  IssueFormController.getAllIssueForm,
+);
 
-router.patch('/:id', IssueFormController.updateIssueForm);
+router.patch(
+  '/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+  ),
+  IssueFormController.updateIssueForm,
+);
 
-router.delete('/:id', IssueFormController.deleteIssueForm);
+router.delete(
+  '/:id',
+  Authorization(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  IssueFormController.deleteIssueForm,
+);
 
-router.get('/:id', IssueFormController.getSingleIssueForm);
+router.get(
+  '/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  IssueFormController.getSingleIssueForm,
+);
 
 export const IssueFormRoutes = router;
