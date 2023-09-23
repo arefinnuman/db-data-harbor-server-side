@@ -4,6 +4,7 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../custom/catchAsync';
 import sendResponse from '../../../custom/sendResponse';
 import pick from '../../../interfaces/pick';
+import { IUser } from '../user/user.interface';
 import { BoothManagementFilterableFields } from './boothManagement.constant';
 import { IBoothManagement } from './boothManagement.interface';
 import { BoothManagementService } from './boothManagement.service';
@@ -11,7 +12,12 @@ import { BoothManagementService } from './boothManagement.service';
 const createBoothManagement = catchAsync(
   async (req: Request, res: Response) => {
     const { ...data } = req.body;
-    const result = await BoothManagementService.createBoothManagement(data);
+    const user = req.user;
+
+    const result = await BoothManagementService.createBoothManagement(
+      data,
+      user as IUser,
+    );
 
     sendResponse(res, {
       statusCode: httpStatus.OK,

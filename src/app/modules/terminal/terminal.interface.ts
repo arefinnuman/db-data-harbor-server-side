@@ -33,8 +33,10 @@ export type ITerminal = Document & {
     name: string;
     contactNumber: string;
   };
-  createdUser?: Types.ObjectId | IUser;
   ebl365?: Types.ObjectId | IEbl365;
+  createdBy?: Types.ObjectId | IUser;
+  approved?: boolean;
+  approvedBy?: Types.ObjectId | IUser;
 };
 
 export type TerminalModel = Model<ITerminal, Record<string, unknown>>;

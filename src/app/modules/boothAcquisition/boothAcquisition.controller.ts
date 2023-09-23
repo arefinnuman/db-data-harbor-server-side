@@ -1,3 +1,4 @@
+import { IUser } from './../user/user.interface';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-undef */
 
@@ -5,6 +6,7 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../custom/catchAsync';
 import sendResponse from '../../../custom/sendResponse';
+import { IBoothAcquisition } from './boothAcquisition.interface';
 import { BoothAcquisitionService } from './boothAcquisition.service';
 
 const createBoothAcquisition = catchAsync(
@@ -20,11 +22,18 @@ const createBoothAcquisition = catchAsync(
       throw new Error('Files are missing');
     }
 
-    const result = await BoothAcquisitionService.createBoothAcquisition({
+    const user = req.user as IUser;
+
+    const payload: IBoothAcquisition = {
       ...req.body,
       boardMemo: boardMemoFile[0].path,
       agreementBetweenEblAndBoothOwner: agreementFile[0].path,
-    });
+    };
+
+    const result = await BoothAcquisitionService.createBoothAcquisition(
+      payload,
+      user,
+    );
 
     sendResponse(res, {
       statusCode: httpStatus.OK,

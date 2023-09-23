@@ -6,13 +6,17 @@ import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { BoothManagement } from '../boothManagement/boothManagement.model';
+import { IUser } from '../user/user.interface';
 import { IssueFormSearchableFields } from './issueForm.constant';
 import { IIssueForm } from './issueForm.interface';
 import { IssueForm } from './issueForm.model';
 
 const createIssueForm = async (
   payload: IIssueForm,
+  user: IUser,
 ): Promise<IIssueForm | null> => {
+  payload.createdBy = user.userId;
+
   const isExist = await BoothManagement.findById(payload.boothManagement);
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
@@ -101,17 +105,11 @@ const getAllIssueForm = async (
     .populate({
       path: 'boothManagement',
       populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
-    .populate({
-      path: 'boothManagement',
-      populate: {
         path: 'ebl365',
         model: 'Ebl365',
       },
     })
+    .populate('createdBy')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -134,13 +132,7 @@ const getSingleIssueForm = async (id: string): Promise<IIssueForm | null> => {
   }
 
   const result = await IssueForm.findById(id)
-    .populate({
-      path: 'boothManagement',
-      populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
+    .populate('createdBy')
     .populate({
       path: 'boothManagement',
       populate: {
@@ -164,13 +156,7 @@ const updateIssueForm = async (
   const result = await IssueForm.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   })
-    .populate({
-      path: 'boothManagement',
-      populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
+    .populate('createdBy')
     .populate({
       path: 'boothManagement',
       populate: {
@@ -233,13 +219,7 @@ const updateToResolve = async (id: string): Promise<IIssueForm | null> => {
       new: true,
     },
   )
-    .populate({
-      path: 'boothManagement',
-      populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
+    .populate('createdBy')
     .populate({
       path: 'boothManagement',
       populate: {
@@ -265,13 +245,7 @@ const updateToPending = async (id: string): Promise<IIssueForm | null> => {
       new: true,
     },
   )
-    .populate({
-      path: 'boothManagement',
-      populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
+    .populate('createdBy')
     .populate({
       path: 'boothManagement',
       populate: {
@@ -284,13 +258,7 @@ const updateToPending = async (id: string): Promise<IIssueForm | null> => {
 
 const getPendingIssues = async (): Promise<IIssueForm[] | null> => {
   const result = await IssueForm.find({ issueStatus: 'pending' })
-    .populate({
-      path: 'boothManagement',
-      populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
+    .populate('createdBy')
     .populate({
       path: 'boothManagement',
       populate: {
@@ -313,13 +281,7 @@ const getPendingIssuesByEbl365 = async (
     ebl365: ebl365,
     issueStatus: 'pending',
   })
-    .populate({
-      path: 'boothManagement',
-      populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
+    .populate('createdBy')
     .populate({
       path: 'boothManagement',
       populate: {
@@ -333,13 +295,7 @@ const getPendingIssuesByEbl365 = async (
 
 const getResolvedIssues = async (): Promise<IIssueForm[] | null> => {
   const result = await IssueForm.find({ issueStatus: 'resolved' })
-    .populate({
-      path: 'boothManagement',
-      populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
+    .populate('createdBy')
     .populate({
       path: 'boothManagement',
       populate: {
@@ -362,13 +318,7 @@ const getResolvedIssuesByEbl365 = async (
     ebl365: ebl365,
     issueStatus: 'resolved',
   })
-    .populate({
-      path: 'boothManagement',
-      populate: {
-        path: 'issues',
-        model: 'IssueForm',
-      },
-    })
+    .populate('createdBy')
     .populate({
       path: 'boothManagement',
       populate: {

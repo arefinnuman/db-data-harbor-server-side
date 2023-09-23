@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document, Model, Types } from 'mongoose';
 import { IEbl365 } from '../ebl365/ebl365.interface';
+import { IUser } from '../user/user.interface';
 
 export type IBoothAcquisition = Document & {
   ebl365: Types.ObjectId | IEbl365;
@@ -18,6 +19,9 @@ export type IBoothAcquisition = Document & {
   boothType?: string;
   boothContractYear?: string;
   boothExpiryDate?: Date;
+  createdBy?: Types.ObjectId | IUser;
+  approved?: boolean;
+  approvedBy?: Types.ObjectId | IUser;
 };
 
 export type BoothAcquisitionModel = Model<

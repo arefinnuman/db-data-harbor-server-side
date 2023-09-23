@@ -1,17 +1,36 @@
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/apiError';
+import { Ebl365 } from '../ebl365/ebl365.model';
+import { IUser } from '../user/user.interface';
 import { IBoothAcquisition } from './boothAcquisition.interface';
 import { BoothAcquisition } from './boothAcquisition.model';
 
 const createBoothAcquisition = async (
   payload: IBoothAcquisition,
+  user: IUser,
 ): Promise<IBoothAcquisition | null> => {
+  const ebl365Exist = await Ebl365.findOne({ _id: payload.ebl365 });
+  if (!ebl365Exist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
+  }
+
+  const ifExist = await BoothAcquisition.findOne({ ebl365: payload.ebl365 });
+  if (ifExist) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      `Booth Acquisition already exist with this booth`,
+    );
+  }
+
+  payload.createdBy = user.userId;
   const result = await BoothAcquisition.create(payload);
   return result;
 };
 
 const getAllBoothAcquisition = async (): Promise<IBoothAcquisition[]> => {
-  const result = await BoothAcquisition.find().populate('ebl365');
+  const result = await BoothAcquisition.find()
+    .populate('ebl365')
+    .populate('createdBy');
   return result;
 };
 
@@ -23,7 +42,9 @@ const getSingleBoothAcquisition = async (
     throw new ApiError(httpStatus.NOT_FOUND, `BoothAcquisition not found`);
   }
 
-  const result = await BoothAcquisition.findById(id).populate('ebl365');
+  const result = await BoothAcquisition.findById(id)
+    .populate('ebl365')
+    .populate('createdBy');
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, `BoothAcquisition not found`);
   }

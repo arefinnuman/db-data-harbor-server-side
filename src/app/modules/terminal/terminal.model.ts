@@ -101,13 +101,22 @@ const TerminalSchema = new Schema(
         required: true,
       },
     },
-    createdUser: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
     ebl365: {
       type: Schema.Types.ObjectId,
       ref: 'Ebl365',
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    approved: {
+      type: Boolean,
+      default: false,
+    },
+    approvedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   {

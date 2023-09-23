@@ -1,10 +1,22 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 
-import { AuthService } from './auth.service';
 import config from '../../../config/config';
 import catchAsync from '../../../custom/catchAsync';
 import sendResponse from '../../../custom/sendResponse';
+import { AuthService } from './auth.service';
+
+const signUp = catchAsync(async (req: Request, res: Response) => {
+  const { ...userData } = req.body;
+  const result = await AuthService.singUp(userData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: `User created successfully !`,
+    data: result,
+  });
+});
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const { ...loginData } = req.body;
@@ -47,6 +59,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const AuthController = {
+  signUp,
   loginUser,
   refreshToken,
 };

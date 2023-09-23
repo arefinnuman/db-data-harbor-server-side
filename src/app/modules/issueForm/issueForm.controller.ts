@@ -4,13 +4,15 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../custom/catchAsync';
 import sendResponse from '../../../custom/sendResponse';
 import pick from '../../../interfaces/pick';
+import { IUser } from '../user/user.interface';
 import { IssueFormFilterableFields } from './issueForm.constant';
 import { IIssueForm } from './issueForm.interface';
 import { IssueFormService } from './issueForm.service';
 
 const createIssueForm = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
-  const result = await IssueFormService.createIssueForm(data);
+  const user = req.user;
+  const result = await IssueFormService.createIssueForm(data, user as IUser);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

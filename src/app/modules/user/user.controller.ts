@@ -12,7 +12,13 @@ import { UserService } from './user.service';
 const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const { ...userData } = req.body;
-    const result = await UserService.createUser(userData);
+    const controllerUser = req.user;
+    console.log('created user', controllerUser);
+
+    const result = await UserService.createUser(
+      userData,
+      controllerUser as IUser,
+    );
 
     sendResponse<IUser>(res, {
       statusCode: httpStatus.OK,
@@ -127,7 +133,12 @@ const updateToViewer = catchAsync(async (req: Request, res: Response) => {
 
 const approveAnUser = catchAsync(async (req: Request, res: Response) => {
   const employeeId = req.params.employeeId;
-  const result = await UserService.approveAnUser(employeeId);
+  const approvedUser = req.user;
+
+  const result = await UserService.approveAnUser(
+    employeeId,
+    approvedUser as IUser,
+  );
 
   sendResponse<IUser>(res, {
     statusCode: httpStatus.OK,
@@ -139,12 +150,39 @@ const approveAnUser = catchAsync(async (req: Request, res: Response) => {
 
 const rejectAnUser = catchAsync(async (req: Request, res: Response) => {
   const employeeId = req.params.employeeId;
-  const result = await UserService.rejectAnUser(employeeId);
+  const approvedUser = req.user;
+
+  const result = await UserService.rejectAnUser(
+    employeeId,
+    approvedUser as IUser,
+  );
 
   sendResponse<IUser>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User updated successfully !',
+    data: result,
+  });
+});
+
+const getApprovedUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.getApprovedUser();
+
+  sendResponse<IUser[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Users retrieved successfully !',
+    data: result,
+  });
+});
+
+const getUnApprovedUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.getUnApprovedUser();
+
+  sendResponse<IUser[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Users retrieved successfully !',
     data: result,
   });
 });
@@ -161,4 +199,6 @@ export const UserController = {
   updateToViewer,
   approveAnUser,
   rejectAnUser,
+  getApprovedUser,
+  getUnApprovedUser,
 };

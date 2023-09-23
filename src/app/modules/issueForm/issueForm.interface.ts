@@ -1,5 +1,6 @@
 import { Document, Model, Types } from 'mongoose';
 import { IBoothManagement } from '../boothManagement/boothManagement.interface';
+import { IUser } from '../user/user.interface';
 
 export type IIssueForm = Document & {
   boothManagement: Types.ObjectId | IBoothManagement;
@@ -20,6 +21,9 @@ export type IIssueForm = Document & {
   issueResolvedDate?: Date;
   issueSubmittedBy: Types.ObjectId;
   issueResolvedBy?: Types.ObjectId;
+  createdBy?: Types.ObjectId | IUser;
+  approved?: boolean;
+  approvedBy?: Types.ObjectId | IUser;
 };
 
 export type IssueFormModel = Model<IIssueForm, Record<string, unknown>>;

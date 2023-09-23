@@ -17,7 +17,8 @@ const createEbl365 = async (
   payload: IEbl365,
   user: IUser,
 ): Promise<IEbl365 | null> => {
-  payload.createdUser = user.userId;
+  payload.createdBy = user?.userId;
+
   const result = await (await Ebl365.create(payload)).populate('machines');
   return result;
 };
@@ -66,7 +67,7 @@ const getAllEbl365 = async (
 
   const results = await Ebl365.find(whereConditions)
     .populate('machines')
-    .populate('createdUser')
+    .populate('createdBy')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -133,7 +134,7 @@ const getSingleEbl365 = async (id: string): Promise<IEbl365 | null> => {
 
   const result = await Ebl365.findById(id)
     .populate('machines')
-    .populate('createdUser');
+    .populate('createdBy');
   return result;
 };
 

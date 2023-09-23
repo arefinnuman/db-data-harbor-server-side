@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
 import config from '../../../config/config';
 import ApiError from '../../../errors/apiError';
+import { IUser } from '../user/user.interface';
 import { User } from '../user/user.model';
 import { jwtHelpers } from './../../../helper/jwtHelpers';
 import {
@@ -9,6 +10,16 @@ import {
   ILoginUserResponse,
   IRefreshTokenResponse,
 } from './auth.interface';
+
+const singUp = async (userData: IUser): Promise<IUser> => {
+  userData.employeeId = 'DH-' + userData.employeeCardNumber;
+  userData.role = 'viewer';
+  userData.ownCreated = true;
+  userData.approved = false;
+
+  const user = await User.create(userData);
+  return user;
+};
 
 const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
   const { id, password } = payload;
@@ -23,6 +34,13 @@ const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
     !(await User.isPasswordMatched(password, isUserExist.password))
   ) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect');
+  }
+
+  if (isUserExist.approved === false) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      'You are not approved yet, Please wait a admin will approve you soon',
+    );
   }
 
   const {
@@ -87,6 +105,7 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
 };
 
 export const AuthService = {
+  singUp,
   loginUser,
   refreshToken,
 };

@@ -51,6 +51,19 @@ const BoothAcquisitionSchema = new Schema(
     boothExpiryDate: {
       type: Date,
     },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    approved: {
+      type: Boolean,
+      default: false,
+    },
+    approvedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

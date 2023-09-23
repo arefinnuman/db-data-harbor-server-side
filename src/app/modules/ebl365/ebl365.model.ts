@@ -91,10 +91,18 @@ const Ebl365Schema = new Schema(
     boothDevices: {
       type: String,
     },
-    createdUser: {
+    createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+    },
+    approved: {
+      type: Boolean,
+      default: false,
+    },
+    approvedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   {

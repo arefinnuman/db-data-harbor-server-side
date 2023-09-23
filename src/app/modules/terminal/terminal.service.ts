@@ -16,10 +16,13 @@ const createTerminal = async (
   payload: ITerminal,
   user: IUser,
 ): Promise<ITerminal | null> => {
-  console.log(user);
-  const createdUserId = user.userId;
+  const ebl365Exist = await Ebl365.findOne({ _id: payload.ebl365 });
+  if (!ebl365Exist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
+  }
 
-  payload.createdUser = createdUserId;
+  const createdById = user?.userId;
+  payload.createdBy = createdById;
 
   let newTerminal: ITerminal | null;
   const session = await mongoose.startSession();
@@ -103,7 +106,7 @@ const getAllTerminal = async (
 
   const result = await Terminal.find(whereConditions)
     .populate('ebl365')
-    .populate('createdUser')
+    .populate('createdBy')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -127,7 +130,7 @@ const getSingleTerminal = async (id: string): Promise<ITerminal | null> => {
 
   const result = await Terminal.findById(id)
     .populate('ebl365')
-    .populate('createdUser');
+    .populate('createdBy');
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, `Terminal not found`);
   }

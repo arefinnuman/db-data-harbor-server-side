@@ -28,6 +28,9 @@ export type IUser = Document & {
   photo?: string;
   needsPasswordChange: true | false;
   approved: true | false;
+  createdBy?: Types.ObjectId | IUser | string;
+  ownCreated?: boolean;
+  approvedBy?: Types.ObjectId | IUser;
   userId?: Types.ObjectId;
 };
 

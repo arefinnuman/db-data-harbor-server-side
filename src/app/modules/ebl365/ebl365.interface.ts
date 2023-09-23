@@ -26,7 +26,9 @@ export type IEbl365 = Document & {
   upazilaOrThana: string;
   controlledBy: string;
   boothDevices?: string;
-  createdUser?: Types.ObjectId | IUser;
+  createdBy?: Types.ObjectId | IUser;
+  approved?: boolean;
+  approvedBy?: Types.ObjectId | IUser;
 };
 
 export type Ebl365Model = Model<IEbl365, Record<string, unknown>>;

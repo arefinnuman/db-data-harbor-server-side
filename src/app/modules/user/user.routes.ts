@@ -7,6 +7,18 @@ import { UserValidation } from './user.validation';
 
 const router = express.Router();
 
+router.get(
+  '/approved-user',
+  Authorization(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  UserController.getApprovedUser,
+);
+
+router.get(
+  '/unapproved-user',
+  Authorization(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  UserController.getUnApprovedUser,
+);
+
 router.post(
   '/',
   Authorization(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),

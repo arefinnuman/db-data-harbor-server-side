@@ -6,13 +6,20 @@ import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { Ebl365 } from '../ebl365/ebl365.model';
+import { IUser } from '../user/user.interface';
 import { BoothManagementSearchableFields } from './boothManagement.constant';
 import { IBoothManagement } from './boothManagement.interface';
 import { BoothManagement } from './boothManagement.model';
 
 const createBoothManagement = async (
   payload: IBoothManagement,
+  user: IUser,
 ): Promise<IBoothManagement | null> => {
+  const ebl365Exist = await Ebl365.findOne({ _id: payload.ebl365 });
+  if (!ebl365Exist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `Ebl365 not found`);
+  }
+
   const ifExist = await BoothManagement.findOne({ ebl365: payload.ebl365 });
   if (ifExist) {
     throw new ApiError(
@@ -23,6 +30,7 @@ const createBoothManagement = async (
 
   const ebl365 = await Ebl365.findOne({ _id: payload.ebl365 });
   payload.numberOfMachine = ebl365?.noOfAvailableMachine;
+  payload.createdBy = user?.userId;
   const result = await BoothManagement.create(payload);
   const populateResult = result.populate('ebl365');
   return populateResult;
@@ -73,6 +81,7 @@ const getAllBoothManagement = async (
   const result = await BoothManagement.find(whereConditions)
     .populate('ebl365')
     .populate('issues')
+    .populate('createdBy')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -98,7 +107,8 @@ const getSingleBoothManagement = async (
 
   const result = await BoothManagement.findById(id)
     .populate('ebl365')
-    .populate('issues');
+    .populate('issues')
+    .populate('createdBy');
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, `BoothManagement not found`);
   }

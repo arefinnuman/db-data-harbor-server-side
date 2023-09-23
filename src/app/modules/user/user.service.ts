@@ -11,8 +11,12 @@ import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IUser, IUserFilters } from '../user/user.interface';
 import { User } from '../user/user.model';
 
-const createUser = async (userData: IUser): Promise<IUser> => {
+const createUser = async (
+  userData: IUser,
+  createdUser: IUser,
+): Promise<IUser> => {
   userData.employeeId = 'DH-' + userData.employeeCardNumber;
+  userData.createdBy = createdUser?.userId;
 
   if (userData.role === 'super_admin') {
     userData.approved = true;
@@ -84,6 +88,7 @@ const getAllUser = async (
     andConditions.length > 0 ? { $and: andConditions } : {};
 
   const result = await User.find(whereConditions)
+    .populate('createdBy', 'fullName')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -228,7 +233,10 @@ const updateToViewer = async (employeeId: string): Promise<IUser | null> => {
   return result;
 };
 
-const approveAnUser = async (employeeId: string): Promise<IUser | null> => {
+const approveAnUser = async (
+  employeeId: string,
+  approvedUser: IUser,
+): Promise<IUser | null> => {
   const isExist = await User.findOne({ employeeId });
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'user not found !');
@@ -240,6 +248,7 @@ const approveAnUser = async (employeeId: string): Promise<IUser | null> => {
     },
     {
       approved: true,
+      approvedBy: approvedUser?.userId,
     },
     {
       new: true,
@@ -248,7 +257,10 @@ const approveAnUser = async (employeeId: string): Promise<IUser | null> => {
   return result;
 };
 
-const rejectAnUser = async (employeeId: string): Promise<IUser | null> => {
+const rejectAnUser = async (
+  employeeId: string,
+  approvedUser: IUser,
+): Promise<IUser | null> => {
   const isExist = await User.findOne({ employeeId });
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'user not found !');
@@ -260,11 +272,22 @@ const rejectAnUser = async (employeeId: string): Promise<IUser | null> => {
     },
     {
       approved: false,
+      approvedBy: approvedUser?.userId,
     },
     {
       new: true,
     },
   );
+  return result;
+};
+
+const getApprovedUser = async (): Promise<IUser[]> => {
+  const result = await User.find({ approved: true });
+  return result;
+};
+
+const getUnApprovedUser = async (): Promise<IUser[]> => {
+  const result = await User.find({ approved: false });
   return result;
 };
 
@@ -280,4 +303,6 @@ export const UserService = {
   updateToViewer,
   approveAnUser,
   rejectAnUser,
+  getApprovedUser,
+  getUnApprovedUser,
 };
