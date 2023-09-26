@@ -11,6 +11,8 @@ const user_constant_1 = require("./user.constant");
 const user_controller_1 = require("./user.controller");
 const user_validation_1 = require("./user.validation");
 const router = express_1.default.Router();
+router.get('/approved-user', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.getApprovedUser);
+router.get('/unapproved-user', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.getUnApprovedUser);
 router.post('/', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), (0, validateRequest_1.default)(user_validation_1.UserValidation.createUserZodSchema), user_controller_1.UserController.createUser);
 router.patch('/:employeeId/update-to-super-admin', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.updateToSuperAdmin);
 router.patch('/:employeeId/update-to-admin', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), user_controller_1.UserController.updateToAdmin);

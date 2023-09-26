@@ -32,7 +32,7 @@ const terminal_constant_1 = require("../terminal/terminal.constant");
 const ebl365_constant_1 = require("./ebl365.constant");
 const ebl365_model_1 = require("./ebl365.model");
 const createEbl365 = (payload, user) => __awaiter(void 0, void 0, void 0, function* () {
-    payload.createdUser = user.userId;
+    payload.createdBy = user === null || user === void 0 ? void 0 : user.userId;
     const result = yield (yield ebl365_model_1.Ebl365.create(payload)).populate('machines');
     return result;
 });
@@ -68,7 +68,7 @@ const getAllEbl365 = (filters, paginationOptions) => __awaiter(void 0, void 0, v
         : {};
     const results = yield ebl365_model_1.Ebl365.find(whereConditions)
         .populate('machines')
-        .populate('createdUser')
+        .populate('createdBy')
         .sort(sortConditions)
         .skip(skip)
         .limit(limit);
@@ -124,7 +124,7 @@ const getSingleEbl365 = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     const result = yield ebl365_model_1.Ebl365.findById(id)
         .populate('machines')
-        .populate('createdUser');
+        .populate('createdBy');
     return result;
 });
 const updateEbl365 = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {

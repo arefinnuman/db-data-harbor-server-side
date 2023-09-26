@@ -33,7 +33,8 @@ const boothManagement_constant_1 = require("./boothManagement.constant");
 const boothManagement_service_1 = require("./boothManagement.service");
 const createBoothManagement = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = __rest(req.body, []);
-    const result = yield boothManagement_service_1.BoothManagementService.createBoothManagement(data);
+    const user = req.user;
+    const result = yield boothManagement_service_1.BoothManagementService.createBoothManagement(data, user);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -56,6 +57,16 @@ const getAllBoothManagement = (0, catchAsync_1.default)((req, res) => __awaiter(
 const getSingleBoothManagement = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const result = yield boothManagement_service_1.BoothManagementService.getSingleBoothManagement(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: `BoothManagement data fetched successfully`,
+        data: result,
+    });
+}));
+const getBoothManagementByEbl365 = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const ebl365Id = req.params.id;
+    const result = yield boothManagement_service_1.BoothManagementService.getBoothManagementByEbl365(ebl365Id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -88,6 +99,7 @@ exports.BoothManagementController = {
     createBoothManagement,
     getAllBoothManagement,
     getSingleBoothManagement,
+    getBoothManagementByEbl365,
     updateBoothManagement,
     deleteBoothManagement,
 };

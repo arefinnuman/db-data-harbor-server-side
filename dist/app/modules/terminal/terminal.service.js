@@ -32,9 +32,12 @@ const ebl365_model_1 = require("../ebl365/ebl365.model");
 const terminal_constant_1 = require("./terminal.constant");
 const terminal_model_1 = require("./terminal.model");
 const createTerminal = (payload, user) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(user);
-    const createdUserId = user.userId;
-    payload.createdUser = createdUserId;
+    const ebl365Exist = yield ebl365_model_1.Ebl365.findOne({ _id: payload.ebl365 });
+    if (!ebl365Exist) {
+        throw new apiError_1.default(http_status_1.default.NOT_FOUND, `Ebl365 not found`);
+    }
+    const createdById = user === null || user === void 0 ? void 0 : user.userId;
+    payload.createdBy = createdById;
     let newTerminal;
     const session = yield mongoose_1.default.startSession();
     try {
@@ -95,7 +98,7 @@ const getAllTerminal = (filters, paginationOptions) => __awaiter(void 0, void 0,
         : {};
     const result = yield terminal_model_1.Terminal.find(whereConditions)
         .populate('ebl365')
-        .populate('createdUser')
+        .populate('createdBy')
         .sort(sortConditions)
         .skip(skip)
         .limit(limit);
@@ -116,7 +119,7 @@ const getSingleTerminal = (id) => __awaiter(void 0, void 0, void 0, function* ()
     }
     const result = yield terminal_model_1.Terminal.findById(id)
         .populate('ebl365')
-        .populate('createdUser');
+        .populate('createdBy');
     if (!result) {
         throw new apiError_1.default(http_status_1.default.NOT_FOUND, `Terminal not found`);
     }

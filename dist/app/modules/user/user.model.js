@@ -107,6 +107,18 @@ const userSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
+    createdBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    ownCreated: {
+        type: Boolean,
+        default: false,
+    },
+    approvedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+    },
 }, {
     timestamps: true,
     toJSON: {

@@ -33,7 +33,8 @@ const issueForm_constant_1 = require("./issueForm.constant");
 const issueForm_service_1 = require("./issueForm.service");
 const createIssueForm = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = __rest(req.body, []);
-    const result = yield issueForm_service_1.IssueFormService.createIssueForm(data);
+    const user = req.user;
+    const result = yield issueForm_service_1.IssueFormService.createIssueForm(data, user);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -142,6 +143,16 @@ const getResolvedIssuesByEbl365 = (0, catchAsync_1.default)((req, res) => __awai
         data: result,
     });
 }));
+const getIssuesByEbl365 = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const ebl365 = req.params.id;
+    const result = yield issueForm_service_1.IssueFormService.getIssuesByEbl365(ebl365);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: `IssueForm data fetched successfully`,
+        data: result,
+    });
+}));
 exports.IssueFormController = {
     createIssueForm,
     getAllIssueForm,
@@ -154,4 +165,5 @@ exports.IssueFormController = {
     getResolvedIssues,
     getPendingIssuesByEbl365,
     getResolvedIssuesByEbl365,
+    getIssuesByEbl365,
 };

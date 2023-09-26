@@ -91,10 +91,18 @@ const Ebl365Schema = new mongoose_1.Schema({
     boothDevices: {
         type: String,
     },
-    createdUser: {
+    createdBy: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+    },
+    approved: {
+        type: Boolean,
+        default: false,
+    },
+    approvedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
     },
 }, {
     timestamps: true,

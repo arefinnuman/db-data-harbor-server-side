@@ -25,10 +25,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const auth_service_1 = require("./auth.service");
 const config_1 = __importDefault(require("../../../config/config"));
 const catchAsync_1 = __importDefault(require("../../../custom/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../../custom/sendResponse"));
+const auth_service_1 = require("./auth.service");
+const signUp = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = __rest(req.body, []);
+    const result = yield auth_service_1.AuthService.singUp(userData);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: `User created successfully !`,
+        data: result,
+    });
+}));
 const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const loginData = __rest(req.body, []);
     const result = yield auth_service_1.AuthService.loginUser(loginData);
@@ -61,6 +71,7 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     });
 }));
 exports.AuthController = {
+    signUp,
     loginUser,
     refreshToken,
 };

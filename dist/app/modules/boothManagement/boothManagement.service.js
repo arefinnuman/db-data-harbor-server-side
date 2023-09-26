@@ -30,13 +30,18 @@ const paginationHelper_1 = require("../../../helper/paginationHelper");
 const ebl365_model_1 = require("../ebl365/ebl365.model");
 const boothManagement_constant_1 = require("./boothManagement.constant");
 const boothManagement_model_1 = require("./boothManagement.model");
-const createBoothManagement = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const createBoothManagement = (payload, user) => __awaiter(void 0, void 0, void 0, function* () {
+    const ebl365Exist = yield ebl365_model_1.Ebl365.findOne({ _id: payload.ebl365 });
+    if (!ebl365Exist) {
+        throw new apiError_1.default(http_status_1.default.NOT_FOUND, `Ebl365 not found`);
+    }
     const ifExist = yield boothManagement_model_1.BoothManagement.findOne({ ebl365: payload.ebl365 });
     if (ifExist) {
         throw new apiError_1.default(http_status_1.default.BAD_REQUEST, `BoothManagement already exist with this booth`);
     }
     const ebl365 = yield ebl365_model_1.Ebl365.findOne({ _id: payload.ebl365 });
     payload.numberOfMachine = ebl365 === null || ebl365 === void 0 ? void 0 : ebl365.noOfAvailableMachine;
+    payload.createdBy = user === null || user === void 0 ? void 0 : user.userId;
     const result = yield boothManagement_model_1.BoothManagement.create(payload);
     const populateResult = result.populate('ebl365');
     return populateResult;
@@ -74,6 +79,7 @@ const getAllBoothManagement = (filters, paginationOptions) => __awaiter(void 0, 
     const result = yield boothManagement_model_1.BoothManagement.find(whereConditions)
         .populate('ebl365')
         .populate('issues')
+        .populate('createdBy')
         .sort(sortConditions)
         .skip(skip)
         .limit(limit);
@@ -94,7 +100,22 @@ const getSingleBoothManagement = (id) => __awaiter(void 0, void 0, void 0, funct
     }
     const result = yield boothManagement_model_1.BoothManagement.findById(id)
         .populate('ebl365')
-        .populate('issues');
+        .populate('issues')
+        .populate('createdBy');
+    if (!result) {
+        throw new apiError_1.default(http_status_1.default.NOT_FOUND, `BoothManagement not found`);
+    }
+    return result;
+});
+const getBoothManagementByEbl365 = (ebl365Id) => __awaiter(void 0, void 0, void 0, function* () {
+    const ifExist = yield boothManagement_model_1.BoothManagement.findOne({ ebl365: ebl365Id });
+    if (!ifExist) {
+        throw new apiError_1.default(http_status_1.default.NOT_FOUND, `BoothManagement not found`);
+    }
+    const result = yield boothManagement_model_1.BoothManagement.findOne({ ebl365: ebl365Id })
+        .populate('ebl365')
+        .populate('issues')
+        .populate('createdBy');
     if (!result) {
         throw new apiError_1.default(http_status_1.default.NOT_FOUND, `BoothManagement not found`);
     }
@@ -122,6 +143,7 @@ exports.BoothManagementService = {
     createBoothManagement,
     getAllBoothManagement,
     getSingleBoothManagement,
+    getBoothManagementByEbl365,
     updateBoothManagement,
     deleteBoothManagement,
 };

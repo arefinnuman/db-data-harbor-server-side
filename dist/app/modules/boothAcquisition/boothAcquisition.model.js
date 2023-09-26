@@ -48,6 +48,19 @@ const BoothAcquisitionSchema = new mongoose_1.Schema({
     boothExpiryDate: {
         type: Date,
     },
+    createdBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    approved: {
+        type: Boolean,
+        default: false,
+    },
+    approvedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+    },
 }, {
     timestamps: true,
     toJSON: {

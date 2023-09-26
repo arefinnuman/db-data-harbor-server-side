@@ -33,7 +33,9 @@ const pick_1 = __importDefault(require("../../../interfaces/pick"));
 const user_service_1 = require("./user.service");
 const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = __rest(req.body, []);
-    const result = yield user_service_1.UserService.createUser(userData);
+    const controllerUser = req.user;
+    console.log('created user', controllerUser);
+    const result = yield user_service_1.UserService.createUser(userData, controllerUser);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -126,7 +128,8 @@ const updateToViewer = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 }));
 const approveAnUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const employeeId = req.params.employeeId;
-    const result = yield user_service_1.UserService.approveAnUser(employeeId);
+    const approvedUser = req.user;
+    const result = yield user_service_1.UserService.approveAnUser(employeeId, approvedUser);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -136,11 +139,30 @@ const approveAnUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 }));
 const rejectAnUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const employeeId = req.params.employeeId;
-    const result = yield user_service_1.UserService.rejectAnUser(employeeId);
+    const approvedUser = req.user;
+    const result = yield user_service_1.UserService.rejectAnUser(employeeId, approvedUser);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'User updated successfully !',
+        data: result,
+    });
+}));
+const getApprovedUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.UserService.getApprovedUser();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Users retrieved successfully !',
+        data: result,
+    });
+}));
+const getUnApprovedUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.UserService.getUnApprovedUser();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Users retrieved successfully !',
         data: result,
     });
 }));
@@ -156,4 +178,6 @@ exports.UserController = {
     updateToViewer,
     approveAnUser,
     rejectAnUser,
+    getApprovedUser,
+    getUnApprovedUser,
 };

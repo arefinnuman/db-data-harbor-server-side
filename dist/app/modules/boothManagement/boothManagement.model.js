@@ -29,6 +29,19 @@ const BoothManagementSchema = new mongoose_1.Schema({
             ref: 'IssueForm',
         },
     ],
+    createdBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    approved: {
+        type: Boolean,
+        default: false,
+    },
+    approvedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+    },
 }, {
     timestamps: true,
     toJSON: {

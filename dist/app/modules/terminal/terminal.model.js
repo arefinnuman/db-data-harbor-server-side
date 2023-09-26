@@ -97,13 +97,22 @@ const TerminalSchema = new mongoose_1.Schema({
             required: true,
         },
     },
-    createdUser: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'User',
-    },
     ebl365: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Ebl365',
+    },
+    createdBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    approved: {
+        type: Boolean,
+        default: false,
+    },
+    approvedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
     },
 }, {
     timestamps: true,

@@ -31,8 +31,9 @@ const employee_constant_1 = require("../../../constants/employee.constant");
 const apiError_1 = __importDefault(require("../../../errors/apiError"));
 const paginationHelper_1 = require("../../../helper/paginationHelper");
 const user_model_1 = require("../user/user.model");
-const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () {
+const createUser = (userData, createdUser) => __awaiter(void 0, void 0, void 0, function* () {
     userData.employeeId = 'DH-' + userData.employeeCardNumber;
+    userData.createdBy = createdUser === null || createdUser === void 0 ? void 0 : createdUser.userId;
     if (userData.role === 'super_admin') {
         userData.approved = true;
         if (!userData.password) {
@@ -87,6 +88,7 @@ const getAllUser = (filters, paginationOptions) => __awaiter(void 0, void 0, voi
     }
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
     const result = yield user_model_1.User.find(whereConditions)
+        .populate('createdBy', 'fullName')
         .sort(sortConditions)
         .skip(skip)
         .limit(limit);
@@ -191,7 +193,7 @@ const updateToViewer = (employeeId) => __awaiter(void 0, void 0, void 0, functio
     });
     return result;
 });
-const approveAnUser = (employeeId) => __awaiter(void 0, void 0, void 0, function* () {
+const approveAnUser = (employeeId, approvedUser) => __awaiter(void 0, void 0, void 0, function* () {
     const isExist = yield user_model_1.User.findOne({ employeeId });
     if (!isExist) {
         throw new apiError_1.default(http_status_1.default.NOT_FOUND, 'user not found !');
@@ -200,12 +202,13 @@ const approveAnUser = (employeeId) => __awaiter(void 0, void 0, void 0, function
         employeeId,
     }, {
         approved: true,
+        approvedBy: approvedUser === null || approvedUser === void 0 ? void 0 : approvedUser.userId,
     }, {
         new: true,
     });
     return result;
 });
-const rejectAnUser = (employeeId) => __awaiter(void 0, void 0, void 0, function* () {
+const rejectAnUser = (employeeId, approvedUser) => __awaiter(void 0, void 0, void 0, function* () {
     const isExist = yield user_model_1.User.findOne({ employeeId });
     if (!isExist) {
         throw new apiError_1.default(http_status_1.default.NOT_FOUND, 'user not found !');
@@ -214,9 +217,18 @@ const rejectAnUser = (employeeId) => __awaiter(void 0, void 0, void 0, function*
         employeeId,
     }, {
         approved: false,
+        approvedBy: approvedUser === null || approvedUser === void 0 ? void 0 : approvedUser.userId,
     }, {
         new: true,
     });
+    return result;
+});
+const getApprovedUser = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.find({ approved: true });
+    return result;
+});
+const getUnApprovedUser = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.find({ approved: false });
     return result;
 });
 exports.UserService = {
@@ -231,4 +243,6 @@ exports.UserService = {
     updateToViewer,
     approveAnUser,
     rejectAnUser,
+    getApprovedUser,
+    getUnApprovedUser,
 };

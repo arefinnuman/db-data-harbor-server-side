@@ -25,7 +25,9 @@ const createBoothAcquisition = (0, catchAsync_1.default)((req, res) => __awaiter
     if (!boardMemoFile || !agreementFile) {
         throw new Error('Files are missing');
     }
-    const result = yield boothAcquisition_service_1.BoothAcquisitionService.createBoothAcquisition(Object.assign(Object.assign({}, req.body), { boardMemo: boardMemoFile[0].path, agreementBetweenEblAndBoothOwner: agreementFile[0].path }));
+    const user = req.user;
+    const payload = Object.assign(Object.assign({}, req.body), { boardMemo: boardMemoFile[0].path, agreementBetweenEblAndBoothOwner: agreementFile[0].path });
+    const result = yield boothAcquisition_service_1.BoothAcquisitionService.createBoothAcquisition(payload, user);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

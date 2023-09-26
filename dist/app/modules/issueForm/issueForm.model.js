@@ -46,7 +46,7 @@ const IssueFormSchema = new mongoose_1.Schema({
     },
     issueStatus: {
         type: String,
-        enum: ['pending', 'resolved'],
+        enum: ['pending', 'working', 'resolved'],
         default: 'pending',
     },
     issueSubmittedDate: {
@@ -61,6 +61,19 @@ const IssueFormSchema = new mongoose_1.Schema({
         ref: 'User',
     },
     issueResolvedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    createdBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    approved: {
+        type: Boolean,
+        default: false,
+    },
+    approvedBy: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
     },

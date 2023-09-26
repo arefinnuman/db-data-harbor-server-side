@@ -18,6 +18,14 @@ const config_1 = __importDefault(require("../../../config/config"));
 const apiError_1 = __importDefault(require("../../../errors/apiError"));
 const user_model_1 = require("../user/user.model");
 const jwtHelpers_1 = require("./../../../helper/jwtHelpers");
+const singUp = (userData) => __awaiter(void 0, void 0, void 0, function* () {
+    userData.employeeId = 'DH-' + userData.employeeCardNumber;
+    userData.role = 'viewer';
+    userData.ownCreated = true;
+    userData.approved = false;
+    const user = yield user_model_1.User.create(userData);
+    return user;
+});
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, password } = payload;
     const isUserExist = yield user_model_1.User.isUserExist(id);
@@ -27,6 +35,9 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (isUserExist.password &&
         !(yield user_model_1.User.isPasswordMatched(password, isUserExist.password))) {
         throw new apiError_1.default(http_status_1.default.UNAUTHORIZED, 'Password is incorrect');
+    }
+    if (isUserExist.approved === false) {
+        throw new apiError_1.default(http_status_1.default.UNAUTHORIZED, 'You are not approved yet, Please wait a admin will approve you soon');
     }
     const { id: userId, employeeId, role, team, needsPasswordChange, approved, fullName, } = isUserExist;
     const accessToken = jwtHelpers_1.jwtHelpers.createToken({ userId, employeeId, role, needsPasswordChange, approved, team, fullName }, config_1.default.jwt.secret, config_1.default.jwt.expires_in);
@@ -60,6 +71,7 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 exports.AuthService = {
+    singUp,
     loginUser,
     refreshToken,
 };

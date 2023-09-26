@@ -31,7 +31,8 @@ const paginationHelper_1 = require("../../../helper/paginationHelper");
 const boothManagement_model_1 = require("../boothManagement/boothManagement.model");
 const issueForm_constant_1 = require("./issueForm.constant");
 const issueForm_model_1 = require("./issueForm.model");
-const createIssueForm = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const createIssueForm = (payload, user) => __awaiter(void 0, void 0, void 0, function* () {
+    payload.createdBy = user.userId;
     const isExist = yield boothManagement_model_1.BoothManagement.findById(payload.boothManagement);
     if (!isExist) {
         throw new apiError_1.default(http_status_1.default.NOT_FOUND, `Ebl365 not found`);
@@ -99,17 +100,11 @@ const getAllIssueForm = (filters, paginationOptions) => __awaiter(void 0, void 0
         .populate({
         path: 'boothManagement',
         populate: {
-            path: 'issues',
-            model: 'IssueForm',
-        },
-    })
-        .populate({
-        path: 'boothManagement',
-        populate: {
             path: 'ebl365',
             model: 'Ebl365',
         },
     })
+        .populate('createdBy')
         .sort(sortConditions)
         .skip(skip)
         .limit(limit);
@@ -129,13 +124,7 @@ const getSingleIssueForm = (id) => __awaiter(void 0, void 0, void 0, function* (
         throw new apiError_1.default(http_status_1.default.NOT_FOUND, `IssueForm not found`);
     }
     const result = yield issueForm_model_1.IssueForm.findById(id)
-        .populate({
-        path: 'boothManagement',
-        populate: {
-            path: 'issues',
-            model: 'IssueForm',
-        },
-    })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
@@ -153,13 +142,7 @@ const updateIssueForm = (id, payload) => __awaiter(void 0, void 0, void 0, funct
     const result = yield issueForm_model_1.IssueForm.findOneAndUpdate({ _id: id }, payload, {
         new: true,
     })
-        .populate({
-        path: 'boothManagement',
-        populate: {
-            path: 'issues',
-            model: 'IssueForm',
-        },
-    })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
@@ -206,13 +189,7 @@ const updateToResolve = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }, {
         new: true,
     })
-        .populate({
-        path: 'boothManagement',
-        populate: {
-            path: 'issues',
-            model: 'IssueForm',
-        },
-    })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
@@ -232,13 +209,7 @@ const updateToPending = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }, {
         new: true,
     })
-        .populate({
-        path: 'boothManagement',
-        populate: {
-            path: 'issues',
-            model: 'IssueForm',
-        },
-    })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
@@ -250,13 +221,7 @@ const updateToPending = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getPendingIssues = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield issueForm_model_1.IssueForm.find({ issueStatus: 'pending' })
-        .populate({
-        path: 'boothManagement',
-        populate: {
-            path: 'issues',
-            model: 'IssueForm',
-        },
-    })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
@@ -275,13 +240,7 @@ const getPendingIssuesByEbl365 = (ebl365) => __awaiter(void 0, void 0, void 0, f
         ebl365: ebl365,
         issueStatus: 'pending',
     })
-        .populate({
-        path: 'boothManagement',
-        populate: {
-            path: 'issues',
-            model: 'IssueForm',
-        },
-    })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
@@ -293,13 +252,7 @@ const getPendingIssuesByEbl365 = (ebl365) => __awaiter(void 0, void 0, void 0, f
 });
 const getResolvedIssues = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield issueForm_model_1.IssueForm.find({ issueStatus: 'resolved' })
-        .populate({
-        path: 'boothManagement',
-        populate: {
-            path: 'issues',
-            model: 'IssueForm',
-        },
-    })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
@@ -309,22 +262,34 @@ const getResolvedIssues = () => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
-const getResolvedIssuesByEbl365 = (ebl365) => __awaiter(void 0, void 0, void 0, function* () {
-    const ifExist = yield issueForm_model_1.IssueForm.findOne({ ebl365: ebl365 });
+const getResolvedIssuesByEbl365 = (ebl365Id) => __awaiter(void 0, void 0, void 0, function* () {
+    const ifExist = yield issueForm_model_1.IssueForm.findOne({
+        'boothManagement.ebl365': ebl365Id,
+    });
     if (!ifExist) {
         throw new apiError_1.default(http_status_1.default.NOT_FOUND, `IssueForm not found`);
     }
     const result = yield issueForm_model_1.IssueForm.find({
-        ebl365: ebl365,
+        ebl365: ebl365Id,
         issueStatus: 'resolved',
     })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
-            path: 'issues',
-            model: 'IssueForm',
+            path: 'ebl365',
+            model: 'Ebl365',
         },
-    })
+    });
+    return result;
+});
+const getIssuesByEbl365 = (ebl365Id) => __awaiter(void 0, void 0, void 0, function* () {
+    const ifExist = yield issueForm_model_1.IssueForm.findOne({ ebl365: ebl365Id });
+    if (!ifExist) {
+        throw new apiError_1.default(http_status_1.default.NOT_FOUND, `IssueForm not found`);
+    }
+    const result = yield issueForm_model_1.IssueForm.find({ ebl365: ebl365Id })
+        .populate('createdBy')
         .populate({
         path: 'boothManagement',
         populate: {
@@ -346,4 +311,5 @@ exports.IssueFormService = {
     getResolvedIssues,
     getPendingIssuesByEbl365,
     getResolvedIssuesByEbl365,
+    getIssuesByEbl365,
 };
