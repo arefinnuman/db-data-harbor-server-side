@@ -46,7 +46,7 @@ const IssueFormSchema = new Schema(
     },
     issueStatus: {
       type: String,
-      enum: ['pending', 'resolved'],
+      enum: ['pending', 'working', 'resolved'],
       default: 'pending',
     },
     issueSubmittedDate: {

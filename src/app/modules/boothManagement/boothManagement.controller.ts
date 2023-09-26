@@ -62,6 +62,21 @@ const getSingleBoothManagement = catchAsync(
   },
 );
 
+const getBoothManagementByEbl365 = catchAsync(
+  async (req: Request, res: Response) => {
+    const ebl365Id = req.params.id;
+    const result =
+      await BoothManagementService.getBoothManagementByEbl365(ebl365Id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `BoothManagement data fetched successfully`,
+      data: result,
+    });
+  },
+);
+
 const updateBoothManagement = catchAsync(
   async (req: Request, res: Response) => {
     const id = req.params.id;
@@ -96,6 +111,7 @@ export const BoothManagementController = {
   createBoothManagement,
   getAllBoothManagement,
   getSingleBoothManagement,
+  getBoothManagementByEbl365,
   updateBoothManagement,
   deleteBoothManagement,
 };

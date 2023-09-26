@@ -30,6 +30,7 @@ const createBoothManagement = async (
 
   const ebl365 = await Ebl365.findOne({ _id: payload.ebl365 });
   payload.numberOfMachine = ebl365?.noOfAvailableMachine;
+
   payload.createdBy = user?.userId;
   const result = await BoothManagement.create(payload);
   const populateResult = result.populate('ebl365');
@@ -116,6 +117,25 @@ const getSingleBoothManagement = async (
   return result;
 };
 
+const getBoothManagementByEbl365 = async (
+  ebl365Id: string,
+): Promise<IBoothManagement | null> => {
+  const ifExist = await BoothManagement.findOne({ ebl365: ebl365Id });
+  if (!ifExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `BoothManagement not found`);
+  }
+
+  const result = await BoothManagement.findOne({ ebl365: ebl365Id })
+    .populate('ebl365')
+    .populate('issues')
+    .populate('createdBy');
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, `BoothManagement not found`);
+  }
+
+  return result;
+};
+
 const updateBoothManagement = async (
   id: string,
   payload: Partial<IBoothManagement>,
@@ -151,6 +171,7 @@ export const BoothManagementService = {
   createBoothManagement,
   getAllBoothManagement,
   getSingleBoothManagement,
+  getBoothManagementByEbl365,
   updateBoothManagement,
   deleteBoothManagement,
 };

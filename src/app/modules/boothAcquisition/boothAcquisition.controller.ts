@@ -1,4 +1,3 @@
-import { IUser } from './../user/user.interface';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-undef */
 
@@ -6,6 +5,7 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../custom/catchAsync';
 import sendResponse from '../../../custom/sendResponse';
+import { IUser } from './../user/user.interface';
 import { IBoothAcquisition } from './boothAcquisition.interface';
 import { BoothAcquisitionService } from './boothAcquisition.service';
 

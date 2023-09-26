@@ -1,9 +1,9 @@
 import { Document, Model, Types } from 'mongoose';
-import { IBoothManagement } from '../boothManagement/boothManagement.interface';
+import { IEbl365 } from '../ebl365/ebl365.interface';
 import { IUser } from '../user/user.interface';
 
 export type IIssueForm = Document & {
-  boothManagement: Types.ObjectId | IBoothManagement;
+  boothManagement: Types.ObjectId | IEbl365;
   machineProblem?: string;
   acProblem?: string;
   lightProblem?: string;
@@ -16,7 +16,7 @@ export type IIssueForm = Document & {
   dvrProblem?: string;
   upsProblem?: string;
   othersProblem?: string;
-  issueStatus: string;
+  issueStatus: 'pending' | 'working' | 'resolved';
   issueSubmittedDate: Date;
   issueResolvedDate?: Date;
   issueSubmittedBy: Types.ObjectId;

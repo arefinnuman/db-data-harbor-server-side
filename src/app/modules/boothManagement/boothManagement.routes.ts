@@ -26,6 +26,17 @@ router.get(
   BoothManagementController.getAllBoothManagement,
 );
 
+router.get(
+  '/ebl-365/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  BoothManagementController.getBoothManagementByEbl365,
+);
+
 router.patch(
   '/:id',
   Authorization(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),

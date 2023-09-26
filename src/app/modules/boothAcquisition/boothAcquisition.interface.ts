@@ -7,12 +7,10 @@ export type IBoothAcquisition = Document & {
   ebl365: Types.ObjectId | IEbl365;
   boardMemo: string;
   agreementBetweenEblAndBoothOwner: string;
-  landOwnerInformation?: {
-    name?: string;
-    mobile?: string;
-    address?: string;
-    accountNo?: string;
-  };
+  landOwnerName?: string;
+  landOwnerAddress?: string;
+  landOwnerPhone?: string;
+  landOwnerEmail?: string;
   boothMonthlyRent?: number;
   boothLocation?: string;
   boothSize?: string;

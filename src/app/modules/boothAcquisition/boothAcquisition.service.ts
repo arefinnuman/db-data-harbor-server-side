@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import ApiError from '../../../errors/apiError';
 import { Ebl365 } from '../ebl365/ebl365.model';
 import { IUser } from '../user/user.interface';
+import { cleanData, cleanSingleData } from './boothAcquisition.constant';
 import { IBoothAcquisition } from './boothAcquisition.interface';
 import { BoothAcquisition } from './boothAcquisition.model';
 
@@ -30,8 +31,9 @@ const createBoothAcquisition = async (
 const getAllBoothAcquisition = async (): Promise<IBoothAcquisition[]> => {
   const result = await BoothAcquisition.find()
     .populate('ebl365')
-    .populate('createdBy');
-  return result;
+    .populate('createdBy')
+    .lean();
+  return cleanData(result);
 };
 
 const getSingleBoothAcquisition = async (
@@ -44,12 +46,14 @@ const getSingleBoothAcquisition = async (
 
   const result = await BoothAcquisition.findById(id)
     .populate('ebl365')
-    .populate('createdBy');
+    .populate('createdBy')
+    .lean();
+
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, `BoothAcquisition not found`);
   }
 
-  return result;
+  return cleanSingleData(result);
 };
 
 const updateBoothAcquisition = async (

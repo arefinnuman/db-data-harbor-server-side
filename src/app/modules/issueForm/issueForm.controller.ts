@@ -152,6 +152,18 @@ const getResolvedIssuesByEbl365 = catchAsync(
   },
 );
 
+const getIssuesByEbl365 = catchAsync(async (req: Request, res: Response) => {
+  const ebl365 = req.params.id;
+  const result = await IssueFormService.getIssuesByEbl365(ebl365);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `IssueForm data fetched successfully`,
+    data: result,
+  });
+});
+
 export const IssueFormController = {
   createIssueForm,
   getAllIssueForm,
@@ -164,4 +176,5 @@ export const IssueFormController = {
   getResolvedIssues,
   getPendingIssuesByEbl365,
   getResolvedIssuesByEbl365,
+  getIssuesByEbl365,
 };

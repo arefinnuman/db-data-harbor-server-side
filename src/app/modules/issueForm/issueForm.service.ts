@@ -307,17 +307,39 @@ const getResolvedIssues = async (): Promise<IIssueForm[] | null> => {
 };
 
 const getResolvedIssuesByEbl365 = async (
-  ebl365: string,
+  ebl365Id: string,
 ): Promise<IIssueForm[] | null> => {
-  const ifExist = await IssueForm.findOne({ ebl365: ebl365 });
+  const ifExist = await IssueForm.findOne({
+    'boothManagement.ebl365': ebl365Id,
+  });
   if (!ifExist) {
     throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
   }
 
   const result = await IssueForm.find({
-    ebl365: ebl365,
+    ebl365: ebl365Id,
     issueStatus: 'resolved',
   })
+    .populate('createdBy')
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
+  return result;
+};
+
+const getIssuesByEbl365 = async (
+  ebl365Id: string,
+): Promise<IIssueForm[] | null> => {
+  const ifExist = await IssueForm.findOne({ ebl365: ebl365Id });
+  if (!ifExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
+  }
+
+  const result = await IssueForm.find({ ebl365: ebl365Id })
     .populate('createdBy')
     .populate({
       path: 'boothManagement',
@@ -341,4 +363,5 @@ export const IssueFormService = {
   getResolvedIssues,
   getPendingIssuesByEbl365,
   getResolvedIssuesByEbl365,
+  getIssuesByEbl365,
 };

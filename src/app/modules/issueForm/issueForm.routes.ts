@@ -5,6 +5,17 @@ import { IssueFormController } from './issueForm.controller';
 
 const router = express.Router();
 
+router.get(
+  '/ebl-365/:ebl365Id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  IssueFormController.getIssuesByEbl365,
+);
+
 router.patch(
   '/resolve/:id',
   Authorization(
@@ -37,7 +48,7 @@ router.get(
 );
 
 router.get(
-  '/pending/:id',
+  '/pending/:ebl365Id',
   Authorization(
     ENUM_USER_ROLE.SUPER_ADMIN,
     ENUM_USER_ROLE.ADMIN,
@@ -59,7 +70,7 @@ router.get(
 );
 
 router.get(
-  '/resolved/:id',
+  '/resolved/:ebl365Id',
   Authorization(
     ENUM_USER_ROLE.SUPER_ADMIN,
     ENUM_USER_ROLE.ADMIN,
