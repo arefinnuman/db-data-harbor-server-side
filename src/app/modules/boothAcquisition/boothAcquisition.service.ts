@@ -23,7 +23,49 @@ const createBoothAcquisition = async (
     );
   }
 
+  const startDate = new Date(payload.boothStartDate);
+  const expiryDate = new Date(payload.boothExpiryDate);
+
+  const yearsDiff = expiryDate.getFullYear() - startDate.getFullYear();
+
+  payload.boothContractYear = yearsDiff;
+  payload.boothContractMonth = yearsDiff * 12;
+
+  payload.boothPerSqftRent = payload.boothMonthlyRent / payload.boothSize;
+  payload.totalBoothRent =
+    payload.boothMonthlyRent * payload.boothContractMonth;
+
+  payload.totalAdvancePayment =
+    (payload.totalBoothRent * payload.advancePaymentPercentage) / 100;
+
+  payload.monthlyAdvancePayment = payload.totalAdvancePayment / 60;
+
+  payload.monthlyRentAfterAdvancePayment =
+    payload.boothMonthlyRent - payload.monthlyAdvancePayment;
+
+  payload.monthlyRentAfterThreeYears =
+    payload.monthlyRentAfterAdvancePayment +
+    (payload.monthlyRentAfterAdvancePayment * 15) / 100;
+
+  payload.monthlyRentAfterFiveYears =
+    payload.monthlyRentAfterThreeYears + payload.monthlyAdvancePayment;
+
+  const currentDate = new Date();
+  const monthDifference =
+    (currentDate.getFullYear() - startDate.getFullYear()) * 12 +
+    currentDate.getMonth() -
+    startDate.getMonth();
+
+  if (monthDifference <= 36) {
+    payload.currentMonthlyRent = payload.monthlyRentAfterAdvancePayment;
+  } else if (monthDifference <= 60) {
+    payload.currentMonthlyRent = payload.monthlyRentAfterThreeYears;
+  } else {
+    payload.currentMonthlyRent = payload.monthlyRentAfterFiveYears;
+  }
+
   payload.createdBy = user.userId;
+
   const result = await BoothAcquisition.create(payload);
   return result;
 };

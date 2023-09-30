@@ -11,12 +11,27 @@ export type IBoothAcquisition = Document & {
   landOwnerAddress?: string;
   landOwnerPhone?: string;
   landOwnerEmail?: string;
-  boothMonthlyRent?: number;
   boothLocation?: string;
-  boothSize?: string;
   boothType?: string;
-  boothContractYear?: string;
-  boothExpiryDate?: Date;
+
+  boothStartDate: Date;
+  boothExpiryDate: Date;
+  boothContractYear: number;
+  boothContractMonth: number;
+
+  boothMonthlyRent: number;
+  boothSize: number;
+  boothPerSqftRent?: number;
+  totalBoothRent?: number;
+  advancePaymentPercentage: number;
+  totalAdvancePayment?: number;
+  monthlyAdvancePayment?: number;
+  monthlyRentAfterAdvancePayment?: number;
+  monthlyRentAfterThreeYears?: number;
+  monthlyRentAfterFiveYears?: number;
+
+  currentMonthlyRent?: number;
+
   createdBy?: Types.ObjectId | IUser;
   approved?: boolean;
   approvedBy?: Types.ObjectId | IUser;
