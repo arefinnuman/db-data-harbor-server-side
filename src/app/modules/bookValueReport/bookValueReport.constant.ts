@@ -1,6 +1,6 @@
-export const AssetBookValueFilterableFields = ['searchTerm', 'id', 'terminal'];
+export const BookValueReportFilterableFields = ['searchTerm', 'id', 'terminal'];
 
-export const AssetBookValueSearchableFields = [];
+export const BookValueReportSearchableFields = [];
 
 export function daysToYearsMonthsDays(days: number): string {
   const daysInYear = 365.25;

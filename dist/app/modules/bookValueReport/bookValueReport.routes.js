@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BookValueReportRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const authorization_1 = __importDefault(require("../../middleWares/authorization"));
+const user_constant_1 = require("../user/user.constant");
+const bookValueReport_controller_1 = require("./bookValueReport.controller");
+const router = express_1.default.Router();
+router.get('/unique', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN, user_constant_1.ENUM_USER_ROLE.MAKER), bookValueReport_controller_1.BookValueReportController.getUniqueReportingTimeBookValueReports);
+router.post('/all', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN, user_constant_1.ENUM_USER_ROLE.MAKER), bookValueReport_controller_1.BookValueReportController.createAllBookValueReports);
+router.post('/selected', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN, user_constant_1.ENUM_USER_ROLE.MAKER), bookValueReport_controller_1.BookValueReportController.createSelectedBookValueReports);
+router.post('/', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN, user_constant_1.ENUM_USER_ROLE.MAKER), bookValueReport_controller_1.BookValueReportController.createBookValueReport);
+router.get('/', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN, user_constant_1.ENUM_USER_ROLE.MAKER, user_constant_1.ENUM_USER_ROLE.VIEWER), bookValueReport_controller_1.BookValueReportController.getAllBookValueReport);
+router.patch('/:id', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), bookValueReport_controller_1.BookValueReportController.updateBookValueReport);
+router.delete('/:id', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN), bookValueReport_controller_1.BookValueReportController.deleteBookValueReport);
+router.get('/:id', (0, authorization_1.default)(user_constant_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constant_1.ENUM_USER_ROLE.ADMIN, user_constant_1.ENUM_USER_ROLE.MAKER, user_constant_1.ENUM_USER_ROLE.VIEWER), bookValueReport_controller_1.BookValueReportController.getSingleBookValueReport);
+exports.BookValueReportRoutes = router;

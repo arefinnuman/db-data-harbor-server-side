@@ -23,72 +23,72 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TerminalController = void 0;
+exports.AssetBookValueController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const pagination_1 = require("../../../constants/pagination");
 const catchAsync_1 = __importDefault(require("../../../custom/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../../custom/sendResponse"));
 const pick_1 = __importDefault(require("../../../interfaces/pick"));
-const terminal_constant_1 = require("./terminal.constant");
-const terminal_service_1 = require("./terminal.service");
-const createTerminal = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const assetBookValue_constant_1 = require("./assetBookValue.constant");
+const assetBookValue_service_1 = require("./assetBookValue.service");
+const createAssetBookValue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = __rest(req.body, []);
-    const user = req === null || req === void 0 ? void 0 : req.user;
-    const result = yield terminal_service_1.TerminalService.createTerminal(data, user);
+    const user = req.user;
+    const result = yield assetBookValue_service_1.AssetBookValueService.createAssetBookValue(data, user);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: `Terminal created successfully`,
+        message: 'AssetBookValue Created Successfully',
         data: result,
     });
 }));
-const getAllTerminal = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const filters = (0, pick_1.default)(req.query, terminal_constant_1.TerminalFilterableFields);
+const getAllAssetBookValue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const filters = (0, pick_1.default)(req.query, assetBookValue_constant_1.AssetBookValueFilterableFields);
     const paginationOptions = (0, pick_1.default)(req.query, pagination_1.paginationFields);
-    const result = yield terminal_service_1.TerminalService.getAllTerminal(filters, paginationOptions);
+    const result = yield assetBookValue_service_1.AssetBookValueService.getAllAssetBookValue(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: `Terminal Data Fetched Successfully`,
+        message: `AssetBookValue Data Fetched Successfully`,
         meta: result.meta,
         data: result.data,
     });
 }));
-const getSingleTerminal = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getSingleAssetBookValue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
-    const result = yield terminal_service_1.TerminalService.getSingleTerminal(id);
+    const result = yield assetBookValue_service_1.AssetBookValueService.getSingleAssetBookValue(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: `Terminal data fetched successfully`,
+        message: `AssetBookValue data fetched successfully`,
         data: result,
     });
 }));
-const updateTerminal = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateAssetBookValue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const data = req.body;
-    const result = yield terminal_service_1.TerminalService.updateTerminal(id, data);
+    const result = yield assetBookValue_service_1.AssetBookValueService.updateAssetBookValue(id, data);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: `Terminal updated successfully`,
+        message: `AssetBookValue updated successfully`,
         data: result,
     });
 }));
-const deleteTerminal = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteAssetBookValue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
-    const result = yield terminal_service_1.TerminalService.deleteTerminal(id);
+    const result = yield assetBookValue_service_1.AssetBookValueService.deleteAssetBookValue(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: `Terminal deleted successfully`,
+        message: `AssetBookValue deleted successfully`,
         data: result || null,
     });
 }));
-exports.TerminalController = {
-    createTerminal,
-    getAllTerminal,
-    getSingleTerminal,
-    updateTerminal,
-    deleteTerminal,
+exports.AssetBookValueController = {
+    createAssetBookValue,
+    getAllAssetBookValue,
+    getSingleAssetBookValue,
+    updateAssetBookValue,
+    deleteAssetBookValue,
 };

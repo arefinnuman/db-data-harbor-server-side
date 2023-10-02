@@ -1,5 +1,7 @@
 import express from 'express';
+import { AssetBookValueRoutes } from '../modules/assetBookValue/assetBookValue.routes';
 import { AuthRoutes } from '../modules/auth/auth.routes';
+import { BookValueReportRoutes } from '../modules/bookValueReport/bookValueReport.routes';
 import { BoothAcquisitionRoutes } from '../modules/boothAcquisition/boothAcquisition.routes';
 import { BoothManagementRoutes } from '../modules/boothManagement/boothManagement.routes';
 import { Ebl365Routes } from '../modules/ebl365/ebl365.routes';
@@ -36,6 +38,14 @@ const moduleRoutes = [
   {
     path: '/booth-acquisition',
     route: BoothAcquisitionRoutes,
+  },
+  {
+    path: '/asset-book-value',
+    route: AssetBookValueRoutes,
+  },
+  {
+    path: '/book-value-report',
+    route: BookValueReportRoutes,
   },
 ];
 

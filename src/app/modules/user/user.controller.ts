@@ -13,7 +13,6 @@ const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const { ...userData } = req.body;
     const controllerUser = req.user;
-    console.log('created user', controllerUser);
 
     const result = await UserService.createUser(
       userData,

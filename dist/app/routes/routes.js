@@ -4,7 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const assetBookValue_routes_1 = require("../modules/assetBookValue/assetBookValue.routes");
 const auth_routes_1 = require("../modules/auth/auth.routes");
+const bookValueReport_routes_1 = require("../modules/bookValueReport/bookValueReport.routes");
 const boothAcquisition_routes_1 = require("../modules/boothAcquisition/boothAcquisition.routes");
 const boothManagement_routes_1 = require("../modules/boothManagement/boothManagement.routes");
 const ebl365_routes_1 = require("../modules/ebl365/ebl365.routes");
@@ -40,6 +42,14 @@ const moduleRoutes = [
     {
         path: '/booth-acquisition',
         route: boothAcquisition_routes_1.BoothAcquisitionRoutes,
+    },
+    {
+        path: '/asset-book-value',
+        route: assetBookValue_routes_1.AssetBookValueRoutes,
+    },
+    {
+        path: '/book-value-report',
+        route: bookValueReport_routes_1.BookValueReportRoutes,
     },
 ];
 moduleRoutes.forEach(route => routes.use(route.path, route.route));

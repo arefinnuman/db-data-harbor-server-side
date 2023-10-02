@@ -12,7 +12,7 @@ import { TerminalService } from './terminal.service';
 const createTerminal = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
   const user = req?.user;
-  console.log(user);
+
 
   const result = await TerminalService.createTerminal(data, user as IUser);
 

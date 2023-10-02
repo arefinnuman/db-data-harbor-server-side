@@ -30,23 +30,61 @@ const BoothAcquisitionSchema = new mongoose_1.Schema({
             type: String,
         },
     },
-    boothMonthlyRent: {
-        type: Number,
-    },
     boothLocation: {
-        type: String,
-    },
-    boothSize: {
         type: String,
     },
     boothType: {
         type: String,
     },
-    boothContractYear: {
-        type: String,
+    boothStartDate: {
+        type: Date,
+        required: true,
     },
     boothExpiryDate: {
         type: Date,
+        required: true,
+    },
+    boothContractYear: {
+        type: Number,
+    },
+    boothContractMonth: {
+        type: Number,
+    },
+    boothMonthlyRent: {
+        type: Number,
+        required: true,
+    },
+    boothSize: {
+        type: Number,
+        required: true,
+    },
+    boothPerSqftRent: {
+        type: Number,
+    },
+    totalBoothRent: {
+        type: Number,
+    },
+    advancePaymentPercentage: {
+        type: Number,
+        required: true,
+    },
+    totalAdvancePayment: {
+        type: Number,
+    },
+    monthlyAdvancePayment: {
+        type: Number,
+    },
+    monthlyRentAfterAdvancePayment: {
+        type: Number,
+    },
+    monthlyRentAfterThreeYears: {
+        type: Number,
+    },
+    monthlyRentAfterFiveYears: {
+        type: Number,
+    },
+    currentMonthlyRent: {
+        type: Number,
     },
     createdBy: {
         type: mongoose_1.Schema.Types.ObjectId,
