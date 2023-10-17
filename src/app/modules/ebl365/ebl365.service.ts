@@ -151,7 +151,7 @@ const updateEbl365 = async (
     new: true,
   })
     .populate('machines')
-    .populate('createdUser');
+    .populate('createdBy');
 
   return result;
 };

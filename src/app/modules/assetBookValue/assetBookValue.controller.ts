@@ -84,10 +84,25 @@ const deleteAssetBookValue = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAssetValueByTerminalId = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await AssetBookValueService.getAssetValueByTerminalId(id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `AssetBookValue data fetched successfully`,
+      data: result,
+    });
+  },
+);
+
 export const AssetBookValueController = {
   createAssetBookValue,
   getAllAssetBookValue,
   getSingleAssetBookValue,
   updateAssetBookValue,
   deleteAssetBookValue,
+  getAssetValueByTerminalId,
 };

@@ -143,10 +143,20 @@ const deleteAssetBookValue = async (
   return result;
 };
 
+const getAssetValueByTerminalId = async (
+  id: string,
+): Promise<IAssetBookValue | null> => {
+  const result = await AssetBookValue.findOne({ terminal: id })
+    .populate('terminal')
+    .populate('createdBy');
+  return result;
+};
+
 export const AssetBookValueService = {
   createAssetBookValue,
   getAllAssetBookValue,
   getSingleAssetBookValue,
+  getAssetValueByTerminalId,
   updateAssetBookValue,
   deleteAssetBookValue,
 };

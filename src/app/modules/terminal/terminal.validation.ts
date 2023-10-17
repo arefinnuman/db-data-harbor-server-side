@@ -26,14 +26,8 @@ const createTerminalZodSchema = z.object({
     glCode: z.string({
       required_error: 'GL code is required',
     }),
-    numberOfBpm: z
-      .number({
-        required_error: 'Number of BPM is required',
-      })
-      .optional(),
-    insuranceLimit: z.number({
-      required_error: 'Insurance limit is required',
-    }),
+    numberOfBpm: z.any().optional(),
+    insuranceLimit: z.any().optional(),
     assetTagSerial: z.string({
       required_error: 'Asset tag serial is required',
     }),
@@ -43,26 +37,10 @@ const createTerminalZodSchema = z.object({
     liveDate: z.string({
       required_error: 'Live date is required',
     }),
-    monthlyNoOfTransaction: z
-      .number({
-        required_error: 'Monthly no of transaction is required',
-      })
-      .optional(),
-    monthlyVolOfTransaction: z
-      .number({
-        required_error: 'Monthly vol of transaction is required',
-      })
-      .optional(),
-    monthlyAvgNoOfTxn: z
-      .number({
-        required_error: 'Monthly avg no of txn is required',
-      })
-      .optional(),
-    monthlyAvgVolOfTxn: z
-      .number({
-        required_error: 'Monthly avg vol of txn is required',
-      })
-      .optional(),
+    monthlyNoOfTransaction: z.any().optional(),
+    monthlyVolOfTransaction: z.any().optional(),
+    monthlyAvgNoOfTxn: z.any().optional(),
+    monthlyAvgVolOfTxn: z.any().optional(),
     custodiansKey: z.object({
       name: z.string({
         required_error: 'Name is required',

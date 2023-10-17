@@ -5,6 +5,17 @@ import { AssetBookValueController } from './assetBookValue.controller';
 
 const router = express.Router();
 
+router.get(
+  '/terminal/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+    ENUM_USER_ROLE.VIEWER,
+  ),
+  AssetBookValueController.getAssetValueByTerminalId,
+);
+
 router.post(
   '/',
   Authorization(
