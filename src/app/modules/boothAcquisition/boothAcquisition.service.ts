@@ -67,6 +67,7 @@ const createBoothAcquisition = async (
   payload.createdBy = user.userId;
 
   const result = await BoothAcquisition.create(payload);
+  console.log(result);
   return result;
 };
 

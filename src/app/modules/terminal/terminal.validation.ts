@@ -103,7 +103,7 @@ const updateTerminalZodSchema = z.object({
       })
       .optional(),
     insuranceLimit: z
-      .number({
+      .any({
         required_error: 'Insurance limit is required',
       })
       .optional(),
@@ -123,23 +123,22 @@ const updateTerminalZodSchema = z.object({
       })
       .optional(),
     monthlyNoOfTransaction: z
-      .number({
+      .any({
         required_error: 'Monthly no of transaction is required',
       })
       .optional(),
     monthlyVolOfTransaction: z
-      .number({
+      .any({
         required_error: 'Monthly vol of transaction is required',
       })
       .optional(),
     monthlyAvgNoOfTxn: z
-
-      .number({
+      .any({
         required_error: 'Monthly avg no of txn is required',
       })
       .optional(),
     monthlyAvgVolOfTxn: z
-      .number({
+      .any({
         required_error: 'Monthly avg vol of txn is required',
       })
       .optional(),
