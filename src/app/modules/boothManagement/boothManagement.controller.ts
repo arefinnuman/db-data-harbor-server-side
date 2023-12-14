@@ -107,6 +107,17 @@ const deleteBoothManagement = catchAsync(
   },
 );
 
+const unAssigned365Booths = catchAsync(async (req: Request, res: Response) => {
+  const result = await BoothManagementService.unAssigned365Booths();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `Unassigned booths fetched successfully`,
+    data: result,
+  });
+});
+
 export const BoothManagementController = {
   createBoothManagement,
   getAllBoothManagement,
@@ -114,4 +125,5 @@ export const BoothManagementController = {
   getBoothManagementByEbl365,
   updateBoothManagement,
   deleteBoothManagement,
+  unAssigned365Booths,
 };

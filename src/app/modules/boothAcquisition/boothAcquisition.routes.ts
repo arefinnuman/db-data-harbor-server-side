@@ -6,6 +6,8 @@ import { BoothAcquisitionController } from './boothAcquisition.controller';
 
 const router = express.Router();
 
+router.get('/unassigned', BoothAcquisitionController.unAssigned365Booths);
+
 router.post(
   '/',
   upload.fields([

@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/apiError';
+import { IEbl365 } from '../ebl365/ebl365.interface';
 import { Ebl365 } from '../ebl365/ebl365.model';
 import { IUser } from '../user/user.interface';
 import { cleanData, cleanSingleData } from './boothAcquisition.constant';
@@ -130,10 +131,36 @@ const deleteBoothAcquisition = async (
   return result;
 };
 
+const unAssigned365Booths = async (): Promise<IEbl365[]> => {
+  const allEbl365 = await Ebl365.find({});
+
+  const allEbl365Ids = allEbl365.map(ebl365 => ebl365._id);
+
+  const assignedEbl365 = await BoothAcquisition.find({
+    ebl365: { $in: allEbl365Ids },
+  });
+  const assignedEbl365Ids = assignedEbl365.map(
+    boothAcquisition => boothAcquisition.ebl365,
+  );
+
+  const unassignedEbl365Ids = allEbl365Ids.filter(
+    id => !assignedEbl365Ids.some(assignedId => assignedId.equals(id)),
+  );
+
+  const resultIds = unassignedEbl365Ids.map(id => new Ebl365({ _id: id }));
+
+  const unassignedEbl365 = await Ebl365.find({
+    _id: { $in: resultIds },
+  });
+
+  return unassignedEbl365;
+};
+
 export const BoothAcquisitionService = {
   createBoothAcquisition,
   getAllBoothAcquisition,
   getSingleBoothAcquisition,
   updateBoothAcquisition,
   deleteBoothAcquisition,
+  unAssigned365Booths,
 };

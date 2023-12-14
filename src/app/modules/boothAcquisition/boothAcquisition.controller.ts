@@ -104,10 +104,22 @@ const deleteBoothAcquisition = catchAsync(
   },
 );
 
+const unAssigned365Booths = catchAsync(async (req: Request, res: Response) => {
+  const result = await BoothAcquisitionService.unAssigned365Booths();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `Unassigned 365 booths fetched successfully`,
+    data: result,
+  });
+});
+
 export const BoothAcquisitionController = {
   createBoothAcquisition,
   getAllBoothAcquisition,
   getSingleBoothAcquisition,
   updateBoothAcquisition,
   deleteBoothAcquisition,
+  unAssigned365Booths,
 };

@@ -5,6 +5,8 @@ import { BoothManagementController } from './boothManagement.controller';
 
 const router = express.Router();
 
+router.get('/unassigned', BoothManagementController.unAssigned365Booths);
+
 router.post(
   '/',
   Authorization(
@@ -59,5 +61,7 @@ router.get(
   ),
   BoothManagementController.getSingleBoothManagement,
 );
+
+router.get('/unassigned', BoothManagementController.unAssigned365Booths);
 
 export const BoothManagementRoutes = router;
