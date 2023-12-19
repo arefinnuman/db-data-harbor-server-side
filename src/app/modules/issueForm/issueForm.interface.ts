@@ -16,7 +16,7 @@ export type IIssueForm = Document & {
   dvrProblem?: string;
   upsProblem?: string;
   othersProblem?: string;
-  issueStatus: 'pending' | 'working' | 'resolved';
+  issueStatus: 'pending' | 'in progress' | 'resolved';
   issueSubmittedDate: Date;
   issueResolvedDate?: Date;
   issueSubmittedBy: Types.ObjectId;

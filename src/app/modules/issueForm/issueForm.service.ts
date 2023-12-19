@@ -256,6 +256,31 @@ const updateToPending = async (id: string): Promise<IIssueForm | null> => {
   return result;
 };
 
+const updateToInProgress = async (id: string): Promise<IIssueForm | null> => {
+  const isExist = await IssueForm.findOne({ _id: id });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, `IssueForm not found`);
+  }
+  const result = await IssueForm.findOneAndUpdate(
+    { _id: id },
+    {
+      issueStatus: 'in progress',
+    },
+    {
+      new: true,
+    },
+  )
+    .populate('createdBy')
+    .populate({
+      path: 'boothManagement',
+      populate: {
+        path: 'ebl365',
+        model: 'Ebl365',
+      },
+    });
+  return result;
+};
+
 const getPendingIssues = async (): Promise<IIssueForm[] | null> => {
   const result = await IssueForm.find({ issueStatus: 'pending' })
     .populate('createdBy')
@@ -361,6 +386,7 @@ export const IssueFormService = {
   updateToPending,
   getPendingIssues,
   getResolvedIssues,
+  updateToInProgress,
   getPendingIssuesByEbl365,
   getResolvedIssuesByEbl365,
   getIssuesByEbl365,

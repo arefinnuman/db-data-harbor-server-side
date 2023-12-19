@@ -36,6 +36,16 @@ router.patch(
   IssueFormController.updateToPending,
 );
 
+router.patch(
+  '/in-progress/:id',
+  Authorization(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.MAKER,
+  ),
+  IssueFormController.updateToInProgress,
+);
+
 router.get(
   '/pending',
   Authorization(
