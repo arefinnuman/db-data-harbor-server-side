@@ -98,6 +98,20 @@ const getAssetValueByTerminalId = catchAsync(
   },
 );
 
+const unAssignedTerminalsInAssetBookValue = catchAsync(
+  async (req: Request, res: Response) => {
+    const result =
+      await AssetBookValueService.unAssignedTerminalsInAssetBookValue();
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `AssetBookValue data fetched successfully`,
+      data: result,
+    });
+  },
+);
+
 export const AssetBookValueController = {
   createAssetBookValue,
   getAllAssetBookValue,
@@ -105,4 +119,5 @@ export const AssetBookValueController = {
   updateAssetBookValue,
   deleteAssetBookValue,
   getAssetValueByTerminalId,
+  unAssignedTerminalsInAssetBookValue,
 };

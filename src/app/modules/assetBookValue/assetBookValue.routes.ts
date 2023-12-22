@@ -16,6 +16,12 @@ router.get(
   AssetBookValueController.getAssetValueByTerminalId,
 );
 
+router.get(
+  '/unassigned-terminals',
+  Authorization(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  AssetBookValueController.unAssignedTerminalsInAssetBookValue,
+);
+
 router.post(
   '/',
   Authorization(

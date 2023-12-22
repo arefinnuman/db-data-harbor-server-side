@@ -5,8 +5,9 @@ import { PaginationHelpers } from '../../../helper/paginationHelper';
 import { IConstantFilters } from '../../../interfaces/constantFilters';
 import { IGenericResponse } from '../../../interfaces/genericResponse';
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { Terminal } from '../terminal/terminal.model';
+import { ITerminal } from '../terminal/terminal.interface';
 import { IUser } from '../user/user.interface';
+import { Terminal } from './../terminal/terminal.model';
 import { AssetBookValueSearchableFields } from './assetBookValue.constant';
 import { IAssetBookValue } from './assetBookValue.interface';
 import { AssetBookValue } from './assetBookValue.model';
@@ -152,6 +153,32 @@ const getAssetValueByTerminalId = async (
   return result;
 };
 
+const unAssignedTerminalsInAssetBookValue = async (): Promise<ITerminal[]> => {
+  const allTerminals = await Terminal.find({});
+  const allTerminalIds = allTerminals.map(terminal => terminal._id);
+
+  const assignedTerminals = await AssetBookValue.find({
+    terminal: { $in: allTerminalIds },
+  });
+
+  const assignedTerminalIds = assignedTerminals.map(
+    assetBookValue => assetBookValue.terminal,
+  );
+
+  const unassignedTerminalIds = allTerminalIds.filter(
+    id => !assignedTerminalIds.some(assignedId => assignedId.equals(id)),
+  );
+
+  const resultIds = unassignedTerminalIds.map(id => new Terminal({ _id: id }));
+
+  const unassignedTerminals = await Terminal.find({
+    _id: { $in: resultIds },
+  });
+
+  console.log(unassignedTerminals.length);
+  return unassignedTerminals;
+};
+
 export const AssetBookValueService = {
   createAssetBookValue,
   getAllAssetBookValue,
@@ -159,4 +186,5 @@ export const AssetBookValueService = {
   getAssetValueByTerminalId,
   updateAssetBookValue,
   deleteAssetBookValue,
+  unAssignedTerminalsInAssetBookValue,
 };
