@@ -86,7 +86,13 @@ const createBookValueReport = async (
 
   const result = await (
     await BookValueReport.create(payload)
-  ).populate('assetBookValue');
+  ).populate({
+    path: 'assetBookValue',
+    populate: {
+      path: 'terminal',
+    },
+  });
+
   return result;
 };
 
