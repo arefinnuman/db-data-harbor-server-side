@@ -78,7 +78,12 @@ const createBookValueReport = (payload, user) => __awaiter(void 0, void 0, void 
     if (user === null || user === void 0 ? void 0 : user.userId) {
         payload.createdBy = user.userId;
     }
-    const result = yield (yield bookValueReport_model_1.BookValueReport.create(payload)).populate('assetBookValue');
+    const result = yield (yield bookValueReport_model_1.BookValueReport.create(payload)).populate({
+        path: 'assetBookValue',
+        populate: {
+            path: 'terminal',
+        },
+    });
     return result;
 });
 const createAllBookValueReports = (data, user) => __awaiter(void 0, void 0, void 0, function* () {

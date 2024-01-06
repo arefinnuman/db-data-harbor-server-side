@@ -28,14 +28,8 @@ const createTerminalZodSchema = zod_1.z.object({
         glCode: zod_1.z.string({
             required_error: 'GL code is required',
         }),
-        numberOfBpm: zod_1.z
-            .number({
-            required_error: 'Number of BPM is required',
-        })
-            .optional(),
-        insuranceLimit: zod_1.z.number({
-            required_error: 'Insurance limit is required',
-        }),
+        numberOfBpm: zod_1.z.any().optional(),
+        insuranceLimit: zod_1.z.any().optional(),
         assetTagSerial: zod_1.z.string({
             required_error: 'Asset tag serial is required',
         }),
@@ -45,26 +39,10 @@ const createTerminalZodSchema = zod_1.z.object({
         liveDate: zod_1.z.string({
             required_error: 'Live date is required',
         }),
-        monthlyNoOfTransaction: zod_1.z
-            .number({
-            required_error: 'Monthly no of transaction is required',
-        })
-            .optional(),
-        monthlyVolOfTransaction: zod_1.z
-            .number({
-            required_error: 'Monthly vol of transaction is required',
-        })
-            .optional(),
-        monthlyAvgNoOfTxn: zod_1.z
-            .number({
-            required_error: 'Monthly avg no of txn is required',
-        })
-            .optional(),
-        monthlyAvgVolOfTxn: zod_1.z
-            .number({
-            required_error: 'Monthly avg vol of txn is required',
-        })
-            .optional(),
+        monthlyNoOfTransaction: zod_1.z.any().optional(),
+        monthlyVolOfTransaction: zod_1.z.any().optional(),
+        monthlyAvgNoOfTxn: zod_1.z.any().optional(),
+        monthlyAvgVolOfTxn: zod_1.z.any().optional(),
         custodiansKey: zod_1.z.object({
             name: zod_1.z.string({
                 required_error: 'Name is required',
@@ -126,7 +104,7 @@ const updateTerminalZodSchema = zod_1.z.object({
         })
             .optional(),
         insuranceLimit: zod_1.z
-            .number({
+            .any({
             required_error: 'Insurance limit is required',
         })
             .optional(),
@@ -146,22 +124,22 @@ const updateTerminalZodSchema = zod_1.z.object({
         })
             .optional(),
         monthlyNoOfTransaction: zod_1.z
-            .number({
+            .any({
             required_error: 'Monthly no of transaction is required',
         })
             .optional(),
         monthlyVolOfTransaction: zod_1.z
-            .number({
+            .any({
             required_error: 'Monthly vol of transaction is required',
         })
             .optional(),
         monthlyAvgNoOfTxn: zod_1.z
-            .number({
+            .any({
             required_error: 'Monthly avg no of txn is required',
         })
             .optional(),
         monthlyAvgVolOfTxn: zod_1.z
-            .number({
+            .any({
             required_error: 'Monthly avg vol of txn is required',
         })
             .optional(),

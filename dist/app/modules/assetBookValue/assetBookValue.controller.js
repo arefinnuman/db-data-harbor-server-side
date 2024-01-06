@@ -85,10 +85,31 @@ const deleteAssetBookValue = (0, catchAsync_1.default)((req, res) => __awaiter(v
         data: result || null,
     });
 }));
+const getAssetValueByTerminalId = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield assetBookValue_service_1.AssetBookValueService.getAssetValueByTerminalId(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: `AssetBookValue data fetched successfully`,
+        data: result,
+    });
+}));
+const unAssignedTerminalsInAssetBookValue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield assetBookValue_service_1.AssetBookValueService.unAssignedTerminalsInAssetBookValue();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: `AssetBookValue data fetched successfully`,
+        data: result,
+    });
+}));
 exports.AssetBookValueController = {
     createAssetBookValue,
     getAllAssetBookValue,
     getSingleAssetBookValue,
     updateAssetBookValue,
     deleteAssetBookValue,
+    getAssetValueByTerminalId,
+    unAssignedTerminalsInAssetBookValue,
 };

@@ -60,6 +60,7 @@ const createBoothAcquisition = (payload, user) => __awaiter(void 0, void 0, void
     }
     payload.createdBy = user.userId;
     const result = yield boothAcquisition_model_1.BoothAcquisition.create(payload);
+    console.log(result);
     return result;
 });
 const getAllBoothAcquisition = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -101,10 +102,25 @@ const deleteBoothAcquisition = (id) => __awaiter(void 0, void 0, void 0, functio
     const result = yield boothAcquisition_model_1.BoothAcquisition.findOneAndDelete({ _id: id }, { new: true });
     return result;
 });
+const unAssigned365Booths = () => __awaiter(void 0, void 0, void 0, function* () {
+    const allEbl365 = yield ebl365_model_1.Ebl365.find({});
+    const allEbl365Ids = allEbl365.map(ebl365 => ebl365._id);
+    const assignedEbl365 = yield boothAcquisition_model_1.BoothAcquisition.find({
+        ebl365: { $in: allEbl365Ids },
+    });
+    const assignedEbl365Ids = assignedEbl365.map(boothAcquisition => boothAcquisition.ebl365);
+    const unassignedEbl365Ids = allEbl365Ids.filter(id => !assignedEbl365Ids.some(assignedId => assignedId.equals(id)));
+    const resultIds = unassignedEbl365Ids.map(id => new ebl365_model_1.Ebl365({ _id: id }));
+    const unassignedEbl365 = yield ebl365_model_1.Ebl365.find({
+        _id: { $in: resultIds },
+    });
+    return unassignedEbl365;
+});
 exports.BoothAcquisitionService = {
     createBoothAcquisition,
     getAllBoothAcquisition,
     getSingleBoothAcquisition,
     updateBoothAcquisition,
     deleteBoothAcquisition,
+    unAssigned365Booths,
 };

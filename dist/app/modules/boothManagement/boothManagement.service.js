@@ -139,6 +139,20 @@ const deleteBoothManagement = (id) => __awaiter(void 0, void 0, void 0, function
     const result = yield boothManagement_model_1.BoothManagement.findOneAndDelete({ _id: id }, { new: true });
     return result;
 });
+const unAssigned365Booths = () => __awaiter(void 0, void 0, void 0, function* () {
+    const allEbl365 = yield ebl365_model_1.Ebl365.find({});
+    const allEbl365Ids = allEbl365.map(ebl365 => ebl365._id);
+    const assignedEbl365 = yield boothManagement_model_1.BoothManagement.find({
+        ebl365: { $in: allEbl365Ids },
+    });
+    const assignedEbl365Ids = assignedEbl365.map(boothManagement => boothManagement.ebl365);
+    const unassignedEbl365Ids = allEbl365Ids.filter(id => !assignedEbl365Ids.some(assignedId => assignedId.equals(id)));
+    const resultIds = unassignedEbl365Ids.map(id => new ebl365_model_1.Ebl365({ _id: id }));
+    const unassignedEbl365 = yield ebl365_model_1.Ebl365.find({
+        _id: { $in: resultIds },
+    });
+    return unassignedEbl365;
+});
 exports.BoothManagementService = {
     createBoothManagement,
     getAllBoothManagement,
@@ -146,4 +160,5 @@ exports.BoothManagementService = {
     getBoothManagementByEbl365,
     updateBoothManagement,
     deleteBoothManagement,
+    unAssigned365Booths,
 };

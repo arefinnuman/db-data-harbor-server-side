@@ -51,9 +51,6 @@ const createEbl365ZodSchema = z.object({
       .min(3, 'Area name must be at least 3 characters')
       .max(50, 'Area name must be at most 50 characters'),
 
-    geoLatitude: z.any({}).optional(),
-    geoLongitude: z.any({}).optional(),
-
     branchControllingGl: z
       .string({
         required_error: 'Branch controlling gl is required',

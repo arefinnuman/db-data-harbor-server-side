@@ -46,7 +46,7 @@ const IssueFormSchema = new mongoose_1.Schema({
     },
     issueStatus: {
         type: String,
-        enum: ['pending', 'working', 'resolved'],
+        enum: ['pending', 'in progress', 'resolved'],
         default: 'pending',
     },
     issueSubmittedDate: {

@@ -10,6 +10,7 @@ const authorization_1 = __importDefault(require("../../middleWares/authorization
 const user_constant_1 = require("../user/user.constant");
 const boothAcquisition_controller_1 = require("./boothAcquisition.controller");
 const router = express_1.default.Router();
+router.get('/unassigned', boothAcquisition_controller_1.BoothAcquisitionController.unAssigned365Booths);
 router.post('/', multer_1.upload.fields([
     { name: 'boardMemo', maxCount: 1 },
     { name: 'agreementBetweenEblAndBoothOwner', maxCount: 1 },

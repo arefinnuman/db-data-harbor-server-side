@@ -219,6 +219,26 @@ const updateToPending = (id) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
+const updateToInProgress = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const isExist = yield issueForm_model_1.IssueForm.findOne({ _id: id });
+    if (!isExist) {
+        throw new apiError_1.default(http_status_1.default.NOT_FOUND, `IssueForm not found`);
+    }
+    const result = yield issueForm_model_1.IssueForm.findOneAndUpdate({ _id: id }, {
+        issueStatus: 'in progress',
+    }, {
+        new: true,
+    })
+        .populate('createdBy')
+        .populate({
+        path: 'boothManagement',
+        populate: {
+            path: 'ebl365',
+            model: 'Ebl365',
+        },
+    });
+    return result;
+});
 const getPendingIssues = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield issueForm_model_1.IssueForm.find({ issueStatus: 'pending' })
         .populate('createdBy')
@@ -309,6 +329,7 @@ exports.IssueFormService = {
     updateToPending,
     getPendingIssues,
     getResolvedIssues,
+    updateToInProgress,
     getPendingIssuesByEbl365,
     getResolvedIssuesByEbl365,
     getIssuesByEbl365,

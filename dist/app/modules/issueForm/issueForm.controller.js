@@ -95,6 +95,16 @@ const updateToResolve = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
         data: result,
     });
 }));
+const updateToInProgress = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield issueForm_service_1.IssueFormService.updateToInProgress(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: `IssueForm updated successfully`,
+        data: result,
+    });
+}));
 const updateToPending = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const result = yield issueForm_service_1.IssueFormService.updateToPending(id);
@@ -166,4 +176,5 @@ exports.IssueFormController = {
     getPendingIssuesByEbl365,
     getResolvedIssuesByEbl365,
     getIssuesByEbl365,
+    updateToInProgress,
 };

@@ -136,7 +136,7 @@ const updateEbl365 = (id, payload) => __awaiter(void 0, void 0, void 0, function
         new: true,
     })
         .populate('machines')
-        .populate('createdUser');
+        .populate('createdBy');
     return result;
 });
 const deleteEbl365 = (id) => __awaiter(void 0, void 0, void 0, function* () {

@@ -75,10 +75,20 @@ const deleteBoothAcquisition = (0, catchAsync_1.default)((req, res) => __awaiter
         data: result || null,
     });
 }));
+const unAssigned365Booths = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield boothAcquisition_service_1.BoothAcquisitionService.unAssigned365Booths();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: `Unassigned 365 booths fetched successfully`,
+        data: result,
+    });
+}));
 exports.BoothAcquisitionController = {
     createBoothAcquisition,
     getAllBoothAcquisition,
     getSingleBoothAcquisition,
     updateBoothAcquisition,
     deleteBoothAcquisition,
+    unAssigned365Booths,
 };

@@ -27,7 +27,7 @@ exports.AssetBookValueService = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const apiError_1 = __importDefault(require("../../../errors/apiError"));
 const paginationHelper_1 = require("../../../helper/paginationHelper");
-const terminal_model_1 = require("../terminal/terminal.model");
+const terminal_model_1 = require("./../terminal/terminal.model");
 const assetBookValue_constant_1 = require("./assetBookValue.constant");
 const assetBookValue_model_1 = require("./assetBookValue.model");
 const createAssetBookValue = (payload, user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -119,10 +119,33 @@ const deleteAssetBookValue = (id) => __awaiter(void 0, void 0, void 0, function*
     const result = yield assetBookValue_model_1.AssetBookValue.findOneAndDelete({ _id: id }, { new: true });
     return result;
 });
+const getAssetValueByTerminalId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield assetBookValue_model_1.AssetBookValue.findOne({ terminal: id })
+        .populate('terminal')
+        .populate('createdBy');
+    return result;
+});
+const unAssignedTerminalsInAssetBookValue = () => __awaiter(void 0, void 0, void 0, function* () {
+    const allTerminals = yield terminal_model_1.Terminal.find({});
+    const allTerminalIds = allTerminals.map(terminal => terminal._id);
+    const assignedTerminals = yield assetBookValue_model_1.AssetBookValue.find({
+        terminal: { $in: allTerminalIds },
+    });
+    const assignedTerminalIds = assignedTerminals.map(assetBookValue => assetBookValue.terminal);
+    const unassignedTerminalIds = allTerminalIds.filter(id => !assignedTerminalIds.some(assignedId => assignedId.equals(id)));
+    const resultIds = unassignedTerminalIds.map(id => new terminal_model_1.Terminal({ _id: id }));
+    const unassignedTerminals = yield terminal_model_1.Terminal.find({
+        _id: { $in: resultIds },
+    });
+    console.log(unassignedTerminals.length);
+    return unassignedTerminals;
+});
 exports.AssetBookValueService = {
     createAssetBookValue,
     getAllAssetBookValue,
     getSingleAssetBookValue,
+    getAssetValueByTerminalId,
     updateAssetBookValue,
     deleteAssetBookValue,
+    unAssignedTerminalsInAssetBookValue,
 };
