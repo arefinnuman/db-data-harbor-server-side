@@ -63,7 +63,6 @@ const createSelectedBookValueReports = (0, catchAsync_1.default)((req, res) => _
             message: 'selectedIds must be an array of AssetBookValue IDs',
         });
     }
-    console.log('selected id', selectedAssetBookValueIds);
     const result = yield bookValueReport_service_1.BookValueReportService.createSelectedBookValueReports(user, selectedAssetBookValueIds, reportingDate);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,

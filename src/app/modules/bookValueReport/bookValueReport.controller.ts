@@ -60,7 +60,6 @@ const createSelectedBookValueReports = catchAsync(
       });
     }
 
-    console.log('selected id', selectedAssetBookValueIds);
     const result = await BookValueReportService.createSelectedBookValueReports(
       user as IUser,
       selectedAssetBookValueIds,

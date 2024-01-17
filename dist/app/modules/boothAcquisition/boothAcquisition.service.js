@@ -60,7 +60,6 @@ const createBoothAcquisition = (payload, user) => __awaiter(void 0, void 0, void
     }
     payload.createdBy = user.userId;
     const result = yield boothAcquisition_model_1.BoothAcquisition.create(payload);
-    console.log(result);
     return result;
 });
 const getAllBoothAcquisition = () => __awaiter(void 0, void 0, void 0, function* () {

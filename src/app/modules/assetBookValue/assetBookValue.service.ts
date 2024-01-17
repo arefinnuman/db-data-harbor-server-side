@@ -175,7 +175,6 @@ const unAssignedTerminalsInAssetBookValue = async (): Promise<ITerminal[]> => {
     _id: { $in: resultIds },
   });
 
-  console.log(unassignedTerminals.length);
   return unassignedTerminals;
 };
 

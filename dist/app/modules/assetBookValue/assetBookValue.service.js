@@ -137,7 +137,6 @@ const unAssignedTerminalsInAssetBookValue = () => __awaiter(void 0, void 0, void
     const unassignedTerminals = yield terminal_model_1.Terminal.find({
         _id: { $in: resultIds },
     });
-    console.log(unassignedTerminals.length);
     return unassignedTerminals;
 });
 exports.AssetBookValueService = {
